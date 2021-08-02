@@ -15,6 +15,8 @@ namespace NewEggTests
 	public class OrderTests : BaseTest
 	{
 		private NewEggOrdersService _orderService;
+		private DateTime _startDate = DateTime.Now.AddMonths( -2 );
+		private DateTime _endDate = DateTime.Now;
 
 		[ SetUp ]
 		public void Init()
@@ -25,7 +27,7 @@ namespace NewEggTests
 		[ Test ]
 		public async Task GetModifiedOrders()
 		{
-			var orders = await this._orderService.GetModifiedOrdersAsync( DateTime.Now.AddMonths( -1 ), DateTime.Now, WarehouseLocationCountryCode, CancellationToken.None );
+			var orders = await this._orderService.GetModifiedOrdersAsync( _startDate, _endDate, WarehouseLocationCountryCode, CancellationToken.None );
 
 			orders.Should().NotBeEmpty();
 		}
@@ -34,7 +36,7 @@ namespace NewEggTests
 		public async Task GetModifiedOrdersBySmallPage()
 		{
 			base.Config.OrdersPageSize = 1;
-			var orders = await this._orderService.GetModifiedOrdersAsync( DateTime.Now.AddMonths( -1 ), DateTime.Now, WarehouseLocationCountryCode, CancellationToken.None );
+			var orders = await this._orderService.GetModifiedOrdersAsync( _startDate, _endDate, WarehouseLocationCountryCode, CancellationToken.None );
 
 			orders.Should().NotBeEmpty();
 		}
@@ -44,7 +46,7 @@ namespace NewEggTests
 		{
 			this._orderService.HttpClient = this.GetMock( "GetOrderInformation.json" );
 
-			var orders = await this._orderService.GetModifiedOrdersAsync( DateTime.Now.AddDays( -1 ), DateTime.Now, WarehouseLocationCountryCode, CancellationToken.None );
+			var orders = await this._orderService.GetModifiedOrdersAsync( _startDate, _endDate, WarehouseLocationCountryCode, CancellationToken.None );
 
 			orders.Should().NotBeEmpty();
 		}
@@ -53,7 +55,7 @@ namespace NewEggTests
 		{
 			var httpClientMock = Substitute.For< IHttpClient >();
 			var httpResponseMock = Substitute.For< IHttpResponseMessage >();
-			httpResponseMock.ReadContentAsStringAsync().Returns( this.GetFileResponseContent( "GetOrderInformation.json" ) );
+			httpResponseMock.ReadContentAsStringAsync().Returns( this.GetFileResponseContent( fileWithResponsePath ) );
 			httpResponseMock.IsSuccessStatusCode.Returns( true );
 			httpResponseMock.StatusCode.Returns( System.Net.HttpStatusCode.OK );
 			

@@ -29,6 +29,9 @@ namespace NewEggAccess.Models.Feeds
 
 		public InventoryUpdateFeedItem( string sellerPartNumber, string warehouseLocation, int inventory )
 		{
+			if ( string.IsNullOrWhiteSpace( warehouseLocation ) )
+				warehouseLocation = "USA";
+
 			Condition.Requires( sellerPartNumber, "sku/sellerPartNumber" ).IsNotNullOrWhiteSpace().IsNotLongerThan( ItemInventoryRequest.MaxSellerPartNumberLength );
 			Condition.Requires( warehouseLocation, "warehouseLocation" ).IsNotNullOrWhiteSpace().HasLength( 3 );
 			Condition.Requires( inventory, "inventory" ).IsGreaterOrEqual( 0 );

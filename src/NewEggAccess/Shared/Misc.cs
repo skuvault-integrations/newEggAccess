@@ -17,7 +17,9 @@ namespace NewEggAccess.Shared
 					return "{}";
 				else
 				{
-					var serialized = JsonConvert.SerializeObject( source, new IsoDateTimeConverter() );
+					var settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
+					settings.Converters.Add( new IsoDateTimeConverter() );
+					var serialized = JsonConvert.SerializeObject( source, settings );
 					return serialized;
 				}
 			}

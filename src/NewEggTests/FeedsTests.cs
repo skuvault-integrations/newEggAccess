@@ -54,7 +54,7 @@ namespace NewEggTests
 		[ Test ]
 		public async Task GetFeedStatusAsync()
 		{
-			var feedId = "24ZVF18VYNJK1";
+			var feedId = "23FZKD2FCBZ06";
 			var feedStatus = await this._feedsService.GetFeedStatusAsync( feedId, CancellationToken.None );
 
 			feedStatus.Should().NotBeNull();

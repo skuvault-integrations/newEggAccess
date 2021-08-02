@@ -25,7 +25,7 @@ namespace NewEggTests
 		public async Task GetItemInventoryThatExists()
 		{
 			var itemInventory = await this._itemsService.GetSkuInventory( TestSku1, WarehouseLocationCountryCode, CancellationToken.None );
-			
+
 			itemInventory.SellerPartNumber.ToLower().Should().Be( TestSku1.ToLower() );
 			itemInventory.InventoryAllocation.First().AvailableQuantity.Should().BeGreaterThan( 0 );
 		}
@@ -34,7 +34,7 @@ namespace NewEggTests
 		public async Task GetItemInventoryThatDoesntExist()
 		{
 			var sku = Guid.NewGuid().ToString();
-			var itemInventory = await this._itemsService.GetSkuInventory( sku, WarehouseLocationCountryCode, CancellationToken.None );
+			var itemInventory = await this._itemsService.GetSkuInventory(sku, WarehouseLocationCountryCode, CancellationToken.None);
 			itemInventory.Should().BeNull();
 		}
 
@@ -42,8 +42,8 @@ namespace NewEggTests
 		public void GetItemInventory_WhenSkuTooLong_ShouldThrow()
 		{
 			var longSku = new string( 'a', ItemInventoryRequest.MaxSellerPartNumberLength + 1 );
-				
-			Assert.ThrowsAsync< ArgumentException >( async () => 
+
+			Assert.ThrowsAsync< ArgumentException >( async () =>
 			{
 				await this._itemsService.GetSkuInventory( longSku, WarehouseLocationCountryCode, CancellationToken.None );
 			} );
@@ -68,6 +68,21 @@ namespace NewEggTests
 			var itemInventory = await this._itemsService.UpdateSkuQuantityAsync( sku, WarehouseLocationCountryCode, quantity, CancellationToken.None );
 
 			itemInventory.Should().BeNull();
+		}
+
+		[Test]
+		public async Task UpdateItemsInventory_WhenSkuAndQuantityDuplicatedAndDoesntExist_ShouldNotThrowCT055Error()
+		{
+			var inventory = new Dictionary< string, int >
+			{
+				{ "NotExistedSku", 1 }
+			};
+
+			for( var i = 0; i < 6; i++ )
+			{
+				await this._itemsService.UpdateSkusQuantitiesAsync( inventory, WarehouseLocationCountryCode, CancellationToken.None );
+				await Task.Delay( 1000 );
+			}
 		}
 
 		[ Test ]

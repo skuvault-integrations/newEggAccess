@@ -98,7 +98,7 @@ namespace NewEggAccess.Services
 
 			return this.ThrottleRequest( command.Url, command.Payload, mark, async ( token ) =>
 			{
-				var payload = new StringContent( command.Payload, Encoding.UTF8, "application/json" );
+				var payload = new StringContent( command.Payload, Encoding.UTF8, "application/json" );				
 				// NewEgg service responds only on application/json without charset specified
 				payload.Headers.ContentType = MediaTypeHeaderValue.Parse( "application/json" );
 				var httpResponse = await HttpClient.PutAsync( command.Url, payload, token ).ConfigureAwait( false );
@@ -173,7 +173,7 @@ namespace NewEggAccess.Services
 				throw new NewEggRateLimitsExceeded( message );
 			}
 
-			throw new NewEggNetworkException( message );
+			throw new NewEggException( message );
 		}
 
 		private void SaveAndLogRateLimits( IHttpResponseMessage response, string info )

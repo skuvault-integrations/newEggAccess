@@ -9,10 +9,10 @@
     <PackageLicenseUrl></PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/skuvault/newEggAccess</PackageProjectUrl>
     <RepositoryUrl>https://github.com/skuvault/newEggAccess</RepositoryUrl>
-    <Version>1.0.5.0</Version>
+    <Version>1.1.1.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.0.5.0</AssemblyVersion>
-    <FileVersion>1.0.5.0</FileVersion>
+    <AssemblyVersion>1.1.1.0</AssemblyVersion>
+    <FileVersion>1.1.1.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
