@@ -7,8 +7,6 @@ using NewEggAccess.Shared;
 using NewEggAccess.Throttling;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -88,7 +86,7 @@ namespace NewEggAccess.Services
 			}, cancellationToken );
 		}
 		
-		protected Task< ServerResponse > PutAsync( NewEggCommand command, CancellationToken cancellationToken, Mark mark, Func< HttpStatusCode, ErrorResponse, bool > ignoreError )
+		protected Task< ServerResponse > PutAsync(BaseNewEggCommand command, CancellationToken cancellationToken, Mark mark, Func< HttpStatusCode, ErrorResponse, bool > ignoreError )
 		{
 			if ( cancellationToken.IsCancellationRequested )
 			{
@@ -98,7 +96,7 @@ namespace NewEggAccess.Services
 
 			return this.ThrottleRequest( command.Url, command.Payload, mark, async ( token ) =>
 			{
-				var payload = new StringContent( command.Payload, Encoding.UTF8, "application/json" );				
+				var payload = new StringContent( command.Payload, Encoding.UTF8, "application/json" );
 				// NewEgg service responds only on application/json without charset specified
 				payload.Headers.ContentType = MediaTypeHeaderValue.Parse( "application/json" );
 				var httpResponse = await HttpClient.PutAsync( command.Url, payload, token ).ConfigureAwait( false );
@@ -112,7 +110,7 @@ namespace NewEggAccess.Services
 			}, cancellationToken );
 		}
 
-		protected Task< ServerResponse > PostAsync( NewEggCommand command, CancellationToken cancellationToken, Mark mark, Func< HttpStatusCode, ErrorResponse, bool > ignoreError )
+		protected Task< ServerResponse > PostAsync(BaseNewEggCommand command, CancellationToken cancellationToken, Mark mark, Func< HttpStatusCode, ErrorResponse, bool > ignoreError )
 		{
 			if ( cancellationToken.IsCancellationRequested )
 			{

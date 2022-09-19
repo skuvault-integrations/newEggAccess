@@ -1,61 +1,63 @@
 ﻿using CuttingEdge.Conditions;
 using NewEggAccess.Configuration;
-using NewEggAccess.Services.Creds;
-using NewEggAccess.Services.Feeds;
-using NewEggAccess.Services.Items;
-using NewEggAccess.Services.Orders;
+using NewEggAccess.Services;
+using System;
 
 namespace NewEggAccess
 {
 	public class NewEggFactory : INewEggFactory
 	{
-		private string _developerApiKey;
+		private readonly NewEggConfig _config;
+		private NewEggCredentials _credentials;
 
-		public NewEggFactory( string developerApiKey )
+		public NewEggFactory(NewEggConfig config, string sellerId, string developerApiKey, string secretKey)
 		{
-			Condition.Requires( developerApiKey, "developerApiKey" ).IsNotNullOrWhiteSpace();
+			if (config.Platform == NewEggPlatform.NewEggCA)
+			{
+				throw new Exception("NewEgg CA is not supported");
+			}
 
-			this._developerApiKey = developerApiKey;
+			Condition.Requires(developerApiKey, "developerApiKey").IsNotNullOrWhiteSpace();
+			Condition.Requires(sellerId, "sellerId").IsNotNullOrWhiteSpace();
+			Condition.Requires(secretKey, "secretKey").IsNotNullOrWhiteSpace();
+
+			_credentials = new NewEggCredentials(sellerId, developerApiKey, secretKey);
+			_config = config;
 		}
 
-		public INewEggFeedsService CreateFeedsService( NewEggConfig config, string sellerId, string secretKey )
+		public INewEggFeedsService CreateFeedsService()
 		{
-			var credentials = new NewEggCredentials( sellerId, this._developerApiKey, secretKey );
-			
-			if ( config.Platform == NewEggPlatform.NewEgg )
-				return new NewEggFeedsService( config, credentials );
+			if (_config.Platform == NewEggPlatform.NewEgg)
+			{
+				return new Services.Regular.NewEggFeedsService(_config, _credentials);
+			}
 
-			return new BusinessAccount.Services.Feeds.NewEggFeedsService( config, credentials );
+			return new Services.Business.NewEggFeedsService(_config, _credentials);
 		}
 
-		public INewEggItemsService CreateItemsService( NewEggConfig config, string sellerId, string secretKey )
+		public INewEggCredsService CreateCredsService()
 		{
-			var credentials = new NewEggCredentials( sellerId, this._developerApiKey, secretKey );
-			
-			if ( config.Platform == NewEggPlatform.NewEgg )
-				return new NewEggItemsService( config, credentials );
-
-			return new BusinessAccount.Services.Items.NewEggItemsService( config, credentials );
+			return new NewEggCredsService(_config, _credentials);
 		}
 
-		public INewEggOrdersService CreateOrdersService( NewEggConfig config, string sellerId, string secretKey )
+		public INewEggItemsService CreateItemsService()
 		{
-			var credentials = new NewEggCredentials( sellerId, this._developerApiKey, secretKey );
+			if (_config.Platform == NewEggPlatform.NewEgg)
+			{
+				return new Services.Regular.NewEggItemsService(_config, _credentials);
+			}
 
-			if ( config.Platform == NewEggPlatform.NewEgg )
-				return new NewEggOrdersService( config, credentials );
-
-			return new BusinessAccount.Services.Orders.NewEggOrdersService( config, credentials );
+			return new Services.Business.NewEggItemsService(_config, _credentials);
 		}
 
-		public INewEggCredsService CreateCredsService( NewEggConfig config, string sellerId, string secretKey )
+		public INewEggOrdersService CreateOrdersService()
 		{
-			var credentials = new NewEggCredentials( sellerId, this._developerApiKey, secretKey );
+			if (_config.Platform == NewEggPlatform.NewEgg)
+			{
+				return new Services.Regular.NewEggOrdersService(_config, _credentials);
+			}
 
-			if ( config.Platform == NewEggPlatform.NewEgg )
-				return new NewEggCredsService( config, credentials );
-
-			return new BusinessAccount.Services.Creds.NewEggCredsService( config, credentials );
+			return new Services.Business.NewEggOrdersService(_config, _credentials);
 		}
 	}
 }

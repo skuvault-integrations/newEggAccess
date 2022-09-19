@@ -1,7 +1,4 @@
 ﻿using CuttingEdge.Conditions;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NewEggAccess.Models.Orders
 {
