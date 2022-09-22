@@ -81,8 +81,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Regular\BaseTest.cs" />
-    <Compile Include="Business\BaseTest.cs" />
+    <Compile Include="BaseRegularTest.cs" />
+    <Compile Include="BaseTest.cs" />
+    <Compile Include="BaseBusinessTest.cs" />
     <Compile Include="Business\CredsTests.cs" />
     <Compile Include="Business\FeedsTests.cs" />
     <Compile Include="Business\ItemTests.cs" />

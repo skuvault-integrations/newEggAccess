@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace NewEggTests.Business
 {
 	[TestFixture]
-	public class FeedsTests : BaseTest
+	public class FeedsTests : BaseBusinessTest
 	{
 		private INewEggFeedsService _feedsService;
 
@@ -58,10 +58,20 @@ namespace NewEggTests.Business
 		[Test]
 		public async Task GetFeedStatusAsync()
 		{
-			var feedId = "26LY4588NXU3V";
+			var feedId = await GetFeedIdAsync();
 			var feedStatus = await this._feedsService.GetFeedStatusAsync(feedId, Mark.CreateNew(), CancellationToken.None);
 
 			feedStatus.Should().NotBeNull();
+		}
+
+		private async Task<string> GetFeedIdAsync()
+		{
+			var inventory = new List<InventoryUpdateFeedItem>
+			{
+				new InventoryUpdateFeedItem( TestSku1, 100 )
+			};
+
+			return await this._feedsService.UpdateItemsInventoryInBulkAsync(inventory, Mark.CreateNew(), CancellationToken.None);
 		}
 	}
 }

@@ -9,7 +9,6 @@ using NewEggAccess.Models.Commands.Business;
 using NewEggAccess.Models.Business.Items;
 using NewEggAccess.Shared;
 using Newtonsoft.Json;
-using NewEggAccess.Models.Items;
 
 namespace NewEggAccess.Services.Business
 {
@@ -28,7 +27,7 @@ namespace NewEggAccess.Services.Business
 		/// <param name="warehouseLocationCode"></param>
 		/// <param name="token"></param>
 		/// <returns></returns>
-		public async Task<ItemInventory> GetSkuInventoryAsync(string sku, string warehouseLocationCode, Mark mark, CancellationToken cancellationToken)
+		public async Task<Models.Items.ItemInventory> GetSkuInventoryAsync(string sku, string warehouseLocationCode, Mark mark, CancellationToken cancellationToken)
 		{
 			var request = new GetItemInventoryRequest(type: SellerPartNumberRequestType, value: sku);
 
@@ -45,7 +44,7 @@ namespace NewEggAccess.Services.Business
 
 			if (response.Error == null && response.Result != null)
 			{
-				return JsonConvert.DeserializeObject<ItemInventory>(response.Result, new NewEggGetItemInventoryResponseJsonConverter());
+				return JsonConvert.DeserializeObject<Models.Items.ItemInventory>(response.Result, new NewEggGetItemInventoryResponseJsonConverter());
 			}
 
 			return null;
@@ -59,7 +58,7 @@ namespace NewEggAccess.Services.Business
 		/// <param name="quantity"></param>
 		/// <param name="token"></param>
 		/// <returns></returns>
-		public async Task<UpdateItemInventoryResponse> UpdateSkuQuantityAsync(string sku, string warehouseLocationCountryCode, int quantity, Mark mark, CancellationToken cancellationToken)
+		public async Task<Models.Items.UpdateItemInventoryResponse> UpdateSkuQuantityAsync(string sku, string warehouseLocationCountryCode, int quantity, Mark mark, CancellationToken cancellationToken)
 		{
 			var request = new UpdateItemInventoryRequest(SellerPartNumberRequestType, value: sku, quantity);
 
@@ -74,7 +73,7 @@ namespace NewEggAccess.Services.Business
 			var response = await base.PutAsync(command, cancellationToken, mark, ignoreErrorHandler);
 			if (response.Error == null)
 			{
-				return JsonConvert.DeserializeObject<UpdateItemInventoryResponse>(response.Result, new NewEggGetUpdateInventoryResponseJsonConverter());
+				return JsonConvert.DeserializeObject<Models.Items.UpdateItemInventoryResponse>(response.Result, new NewEggGetUpdateInventoryResponseJsonConverter());
 			}
 
 			return null;
@@ -107,18 +106,18 @@ namespace NewEggAccess.Services.Business
 		{
 			var source = serializer.Deserialize<ItemInventory>(reader);
 
-			return new ItemInventory
+			return new Models.Items.ItemInventory
 			{
 				ItemNumber = source.ItemNumber,
 				SellerId = source.SellerId,
 				SellerPartNumber = source.SellerPartNumber,
-				InventoryAllocation = new ItemInventoryAllocation[]
+				InventoryAllocation = new Models.Items.ItemInventoryAllocation[]
 				{
-					new ItemInventoryAllocation
+					new Models.Items.ItemInventoryAllocation
 					{
 						AvailableQuantity = source.AvailableQuantity,
 						FulFillmentOption = source.FulFillmentOption,
-						WarehouseLocation = "USA"
+						WarehouseLocationCode = "USA"
 					}
 				}
 			};
@@ -131,7 +130,7 @@ namespace NewEggAccess.Services.Business
 
 		public override bool CanConvert(Type type)
 		{
-			return typeof(ItemInventory).IsAssignableFrom(type);
+			return typeof(Models.Items.ItemInventory).IsAssignableFrom(type);
 		}
 	}
 
@@ -146,14 +145,14 @@ namespace NewEggAccess.Services.Business
 		{
 			var source = serializer.Deserialize<UpdateItemInventoryResponse>(reader);
 
-			return new UpdateItemInventoryResponse
+			return new Models.Items.UpdateItemInventoryResponse
 			{
 				ItemNumber = source.ItemNumber,
 				SellerId = source.SellerId,
 				SellerPartNumber = source.SellerPartNumber,
-				InventoryList = new UpdateItemInventory[]
+				InventoryList = new Models.Items.UpdateItemInventory[]
 				{
-					new UpdateItemInventory
+					new Models.Items.UpdateItemInventory
 					{
 						WarehouseLocation = "USA",
 						AvailableQuantity = source.AvailableQuantity
@@ -169,7 +168,7 @@ namespace NewEggAccess.Services.Business
 
 		public override bool CanConvert(Type type)
 		{
-			return typeof(UpdateItemInventoryResponse).IsAssignableFrom(type);
+			return typeof(Models.Items.UpdateItemInventoryResponse).IsAssignableFrom(type);
 		}
 	}
 }

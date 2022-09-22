@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace NewEggTests.Regular
 {
 	[TestFixture]
-	public class ItemTests : BaseTest
+	public class ItemTests : BaseRegularTest
 	{
 		private INewEggItemsService _itemsService;
 

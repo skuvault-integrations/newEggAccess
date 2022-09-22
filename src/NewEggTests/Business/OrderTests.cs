@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace NewEggTests.Business
 {
 	[TestFixture]
-	public class OrderTests : BaseTest
+	public class OrderTests : BaseBusinessTest
 	{
 		private NewEggOrdersService _orderService;
 		private DateTime _startDate = DateTime.Now.AddMonths(-4);

@@ -12,6 +12,5 @@
 		public string ItemNumber { get; set; }
 		public string SellerPartNumber { get; set; }
 		public UpdateItemInventory[] InventoryList { get; set; }
-		public int AvailableQuantity { get; set; }
 	}
 }

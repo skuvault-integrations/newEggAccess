@@ -13,11 +13,11 @@ using System.Threading.Tasks;
 namespace NewEggTests.Regular
 {
 	[TestFixture]
-	public class OrderTests : BaseTest
+	public class OrderTests : BaseRegularTest
 	{
 		private NewEggBaseOrdersService _orderService;
-		private DateTime _startDate = DateTime.Now.AddMonths(-2);
-		private DateTime _endDate = DateTime.Now;
+		private DateTime _startDate = new DateTime(2022, 1, 1);
+		private DateTime _endDate = new DateTime(2022, 09, 20);
 
 		[SetUp]
 		public void Init()

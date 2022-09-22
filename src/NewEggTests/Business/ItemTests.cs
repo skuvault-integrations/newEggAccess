@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace NewEggTests.Business
 {
 	[TestFixture]
-	public class ItemTests : BaseTest
+	public class ItemTests : BaseBusinessTest
 	{
 		private INewEggItemsService _itemsService;
 
@@ -26,7 +26,8 @@ namespace NewEggTests.Business
 		[Test]
 		public async Task GetItemInventoryThatExists()
 		{
-			var itemInventory = await this._itemsService.GetSkuInventoryAsync(TestSku1, null, Mark.CreateNew(), CancellationToken.None);
+			var itemInventory = await this._itemsService.GetSkuInventoryAsync(TestSku1, WarehouseLocationCountryCode, Mark.CreateNew(), 
+				CancellationToken.None);
 
 			itemInventory.SellerPartNumber.ToLower().Should().Be(TestSku1.ToLower());
 			itemInventory.InventoryAllocation.First().AvailableQuantity.Should().BeGreaterThan(0);
@@ -36,7 +37,8 @@ namespace NewEggTests.Business
 		public async Task GetItemInventoryThatDoesntExist()
 		{
 			var sku = Guid.NewGuid().ToString();
-			var itemInventory = await this._itemsService.GetSkuInventoryAsync(sku, null, Mark.CreateNew(), CancellationToken.None);
+			var itemInventory = await this._itemsService.GetSkuInventoryAsync(sku, WarehouseLocationCountryCode, Mark.CreateNew(), 
+				CancellationToken.None);
 			itemInventory.Should().BeNull();
 		}
 
@@ -46,16 +48,17 @@ namespace NewEggTests.Business
 			var longSku = new string('a', ItemInventoryRequest.MaxSellerPartNumberLength + 1);
 
 			Assert.ThrowsAsync<ArgumentException>(async () =>
-		 {
-			 await this._itemsService.GetSkuInventoryAsync(longSku, null, Mark.CreateNew(), CancellationToken.None);
-		 });
+			{
+				await this._itemsService.GetSkuInventoryAsync(longSku, WarehouseLocationCountryCode, Mark.CreateNew(), CancellationToken.None);
+			});
 		}
 
 		[Test]
 		public async Task UpdateItemInventoryThatExists()
 		{
 			var quantity = new Random().Next(1, 100);
-			var itemInventory = await this._itemsService.UpdateSkuQuantityAsync(TestSku1, null, quantity, Mark.CreateNew(), CancellationToken.None);
+			var itemInventory = await this._itemsService.UpdateSkuQuantityAsync(TestSku1, WarehouseLocationCountryCode, quantity, Mark.CreateNew(), 
+				CancellationToken.None);
 
 			itemInventory.Should().NotBeNull();
 			itemInventory.SellerPartNumber.ToLower().Should().Be(TestSku1.ToLower());
@@ -67,7 +70,8 @@ namespace NewEggTests.Business
 		{
 			var quantity = new Random().Next(1, 100);
 			var sku = Guid.NewGuid().ToString();
-			var itemInventory = await this._itemsService.UpdateSkuQuantityAsync(sku, null, quantity, Mark.CreateNew(), CancellationToken.None);
+			var itemInventory = await this._itemsService.UpdateSkuQuantityAsync(sku, WarehouseLocationCountryCode, quantity, Mark.CreateNew(), 
+				CancellationToken.None);
 
 			itemInventory.Should().BeNull();
 		}
@@ -82,7 +86,7 @@ namespace NewEggTests.Business
 				{ TestSku2, rand.Next( 1, 100 ) }
 			};
 
-			await this._itemsService.UpdateSkusQuantitiesAsync(inventory, null, Mark.CreateNew(), CancellationToken.None);
+			await this._itemsService.UpdateSkusQuantitiesAsync(inventory, WarehouseLocationCountryCode, Mark.CreateNew(), CancellationToken.None);
 		}
 
 		[Test]
@@ -97,7 +101,7 @@ namespace NewEggTests.Business
 			{
 				for (var i = 0; i < 6; i++)
 				{
-					await this._itemsService.UpdateSkusQuantitiesAsync(inventory, null, Mark.CreateNew(), CancellationToken.None);
+					await this._itemsService.UpdateSkusQuantitiesAsync(inventory, WarehouseLocationCountryCode, Mark.CreateNew(), CancellationToken.None);
 					await Task.Delay(1000);
 				}
 			});
@@ -111,7 +115,7 @@ namespace NewEggTests.Business
 
 			Assert.ThrowsAsync<ArgumentException>(async () =>
 			{
-				await this._itemsService.UpdateSkuQuantityAsync(longSku, null, quantity, Mark.CreateNew(), CancellationToken.None);
+				await this._itemsService.UpdateSkuQuantityAsync(longSku, WarehouseLocationCountryCode, quantity, Mark.CreateNew(), CancellationToken.None);
 			});
 		}
 	}

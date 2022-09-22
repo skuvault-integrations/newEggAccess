@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace NewEggTests.Business
 {
 	[TestFixture]
-	public class CredsTests : BaseTest
+	public class CredsTests : BaseBusinessTest
 	{
 		private NewEggCredsService _credsService;
 
