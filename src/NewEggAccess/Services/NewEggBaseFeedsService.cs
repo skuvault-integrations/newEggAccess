@@ -11,9 +11,9 @@ using Newtonsoft.Json;
 
 namespace NewEggAccess.Services
 {
-	public class NewEggFeedsBaseService : BaseService
+	public class NewEggBaseFeedsService : BaseService
 	{
-		public NewEggFeedsBaseService(NewEggConfig config, NewEggCredentials credentials) : base(credentials, config)
+		public NewEggBaseFeedsService(NewEggConfig config, NewEggCredentials credentials) : base(credentials, config)
 		{
 		}
 

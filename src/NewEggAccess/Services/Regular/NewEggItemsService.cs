@@ -22,7 +22,7 @@ namespace NewEggAccess.Services.Regular
 		}
 
 		/// <summary>
-		///	Get sku's inventory on specified warehouseLocation
+		/// Get sku's inventory on specified warehouseLocation
 		/// </summary>
 		/// <param name="sku"></param>
 		/// <param name="warehouseLocationCode"></param>
@@ -45,7 +45,7 @@ namespace NewEggAccess.Services.Regular
 		}
 
 		/// <summary>
-		///	Update sku's quantity in specified warehouse location
+		/// Update sku's quantity in specified warehouse location
 		/// </summary>
 		/// <param name="sku"></param>
 		/// <param name="warehouseLocation"></param>
@@ -69,7 +69,7 @@ namespace NewEggAccess.Services.Regular
 		}
 
 		/// <summary>
-		///	Updates skus quantities
+		/// Updates skus quantities
 		/// </summary>
 		/// <param name="skusQuantities"></param>
 		/// <param name="token"></param>

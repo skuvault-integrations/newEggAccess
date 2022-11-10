@@ -2,16 +2,16 @@
 
 namespace NewEggAccess.Models
 {
-	public class NewEggApiResponse< T > where T : class, new()
+	public class NewEggApiResponse<T> where T : class, new()
 	{
 		public bool IsSuccess { get; set; }
 		public string OperationType { get; set; }
 		public string SellerID { get; set; }
-		public NewEggApiResponseBody< T > ResponseBody { get; set; }
+		public NewEggApiResponseBody<T> ResponseBody { get; set; }
 	}
 
-	public class NewEggApiResponseBody < T >
+	public class NewEggApiResponseBody<T>
 	{
-		public IEnumerable< T > ResponseList { get; set; }
+		public IEnumerable<T> ResponseList { get; set; }
 	}
 }

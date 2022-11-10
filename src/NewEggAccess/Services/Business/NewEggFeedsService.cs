@@ -11,7 +11,7 @@ using NewEggAccess.Models.Commands;
 
 namespace NewEggAccess.Services.Business
 {
-	public class NewEggFeedsService : NewEggFeedsBaseService, INewEggFeedsService
+	public class NewEggFeedsService : NewEggBaseFeedsService, INewEggFeedsService
 	{
 		public NewEggFeedsService(NewEggConfig config, NewEggCredentials credentials) : base(config, credentials)
 		{

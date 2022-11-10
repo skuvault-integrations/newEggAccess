@@ -12,19 +12,19 @@ namespace NewEggAccess.Services
 {
 	public interface IHttpClient
 	{
-		void SetRequestHeader( string name, string value );
-		void SetAcceptHeader( MediaTypeWithQualityHeaderValue header );
-		Task< IHttpResponseMessage > GetAsync( string url );
-		Task< IHttpResponseMessage > PostAsync( string url, HttpContent content, CancellationToken token );
-		Task< IHttpResponseMessage > PutAsync( string url,  HttpContent content, CancellationToken token );
+		void SetRequestHeader(string name, string value);
+		void SetAcceptHeader(MediaTypeWithQualityHeaderValue header);
+		Task<IHttpResponseMessage> GetAsync(string url);
+		Task<IHttpResponseMessage> PostAsync(string url, HttpContent content, CancellationToken token);
+		Task<IHttpResponseMessage> PutAsync(string url, HttpContent content, CancellationToken token);
 	}
 
 	public interface IHttpResponseMessage
 	{
-		Task< string > ReadContentAsStringAsync();
+		Task<string> ReadContentAsStringAsync();
 		bool IsSuccessStatusCode { get; set; }
 		HttpStatusCode StatusCode { get; set; }
-		string GetHeaderValue( string name );
+		string GetHeaderValue(string name);
 	}
 
 	public class DefaultHttpClient : IHttpClient
@@ -36,29 +36,29 @@ namespace NewEggAccess.Services
 			this.HttpClient = new HttpClient();
 		}
 
-		public void SetRequestHeader( string name, string value )
+		public void SetRequestHeader(string name, string value)
 		{
-			this.HttpClient.DefaultRequestHeaders.Add( name, value );
+			this.HttpClient.DefaultRequestHeaders.Add(name, value);
 		}
 
-		public void SetAcceptHeader( MediaTypeWithQualityHeaderValue header )
+		public void SetAcceptHeader(MediaTypeWithQualityHeaderValue header)
 		{
-			this.HttpClient.DefaultRequestHeaders.Accept.Add( header );
+			this.HttpClient.DefaultRequestHeaders.Accept.Add(header);
 		}
 
-		public async Task< IHttpResponseMessage > GetAsync( string url )
+		public async Task<IHttpResponseMessage> GetAsync(string url)
 		{
-			return new DefaultHttpResponseMessage( await this.HttpClient.GetAsync( url ).ConfigureAwait( false ) );
+			return new DefaultHttpResponseMessage(await this.HttpClient.GetAsync(url).ConfigureAwait(false));
 		}
 
-		public async Task< IHttpResponseMessage > PostAsync( string url, HttpContent content, CancellationToken token )
+		public async Task<IHttpResponseMessage> PostAsync(string url, HttpContent content, CancellationToken token)
 		{
-			return new DefaultHttpResponseMessage( await this.HttpClient.PostAsync( url, content, token ).ConfigureAwait( false ) );
+			return new DefaultHttpResponseMessage(await this.HttpClient.PostAsync(url, content, token).ConfigureAwait(false));
 		}
 
-		public async Task< IHttpResponseMessage > PutAsync( string url, HttpContent content, CancellationToken token )
+		public async Task<IHttpResponseMessage> PutAsync(string url, HttpContent content, CancellationToken token)
 		{
-			return new DefaultHttpResponseMessage( await this.HttpClient.PutAsync( url, content, token ).ConfigureAwait( false ) );
+			return new DefaultHttpResponseMessage(await this.HttpClient.PutAsync(url, content, token).ConfigureAwait(false));
 		}
 	}
 
@@ -66,7 +66,7 @@ namespace NewEggAccess.Services
 	{
 		private HttpResponseMessage _responseMessage;
 
-		public DefaultHttpResponseMessage( HttpResponseMessage responseMessage )
+		public DefaultHttpResponseMessage(HttpResponseMessage responseMessage)
 		{
 			this._responseMessage = responseMessage;
 		}
@@ -89,11 +89,11 @@ namespace NewEggAccess.Services
 			set { }
 		}
 
-		public string GetHeaderValue( string name )
+		public string GetHeaderValue(string name)
 		{
-			this._responseMessage.Headers.TryGetValues( name, out IEnumerable< string > value );
+			this._responseMessage.Headers.TryGetValues(name, out IEnumerable<string> value);
 
-			if ( value != null && value.Any() )
+			if (value != null && value.Any())
 			{
 				return value.First();
 			}
@@ -101,7 +101,7 @@ namespace NewEggAccess.Services
 			return null;
 		}
 
-		public Task< string > ReadContentAsStringAsync()
+		public Task<string> ReadContentAsStringAsync()
 		{
 			return this._responseMessage.Content.ReadAsStringAsync();
 		}

@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace NewEggAccess.Services.Regular
 {
-	public class NewEggFeedsService : NewEggFeedsBaseService, INewEggFeedsService
+	public class NewEggFeedsService : NewEggBaseFeedsService, INewEggFeedsService
 	{
 		public NewEggFeedsService(NewEggConfig config, NewEggCredentials credentials) : base(config, credentials)
 		{
 		}
 
 		/// <summary>
-		///	Submit feed with inventory data (batch update items inventory)
+		/// Submit feed with inventory data (batch update items inventory)
 		/// </summary>
 		/// <param name="inventory"></param>
 		/// <param name="token"></param>
@@ -36,7 +36,7 @@ namespace NewEggAccess.Services.Regular
 		}
 
 		/// <summary>
-		///	Get feed status
+		/// Get feed status
 		/// </summary>
 		/// <param name="feedId">Feed id</param>
 		/// <param name="token">Cancellation token</param>

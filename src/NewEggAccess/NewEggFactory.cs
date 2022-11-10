@@ -35,11 +35,6 @@ namespace NewEggAccess
 			return new Services.Business.NewEggFeedsService(_config, _credentials);
 		}
 
-		public INewEggCredsService CreateCredsService()
-		{
-			return new NewEggCredsService(_config, _credentials);
-		}
-
 		public INewEggItemsService CreateItemsService()
 		{
 			if (_config.Platform == NewEggPlatform.NewEgg)

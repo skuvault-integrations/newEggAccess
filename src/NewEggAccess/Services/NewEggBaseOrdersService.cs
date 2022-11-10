@@ -38,10 +38,37 @@ namespace NewEggAccess.Services
 			return orders;
 		}
 
+		/// <summary>
+		/// Getting of unshipped orders for a short time period
+		/// It uses for validation etsy credentials 
+		/// </summary>
+		/// <param name="mark"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		/// <exception cref="NewEggException"></exception>
+		public async Task<bool> TryGetOrdersAsync(Mark mark, CancellationToken cancellationToken)
+		{
+			int pageIndex = 1;
+			DateTime startDateUtc = DateTime.UtcNow;
+			DateTime endDateUtc = startDateUtc.AddMinutes(1);
+
+			var ordersPageServerResponse = await GetOrdersAsync(pageIndex, NewEggOrderStatusEnum.Unshipped, startDateUtc, endDateUtc,
+				mark, cancellationToken).ConfigureAwait(false);
+
+			if (ordersPageServerResponse.Error == null)
+			{
+				return true;
+			}
+			else
+			{
+				throw new NewEggException(ordersPageServerResponse.Error.Message);
+			}
+		}
+
 		public abstract GetModifiedOrdersCommand GetModifiedOrdersCommand(NewEggConfig config, NewEggCredentials credentials, string payload);
 
-		internal async Task<IEnumerable<NewEggOrder>> GetModifiedOrdersByStatusAsync(DateTime startDateUtc, DateTime endDateUtc, NewEggOrderStatusEnum orderStatus, 
-			Mark mark, CancellationToken token)
+		internal async Task<IEnumerable<NewEggOrder>> GetModifiedOrdersByStatusAsync(DateTime startDateUtc, DateTime endDateUtc, NewEggOrderStatusEnum orderStatus,
+			Mark mark, CancellationToken cancellationToken)
 		{
 			var orders = new List<NewEggOrder>();
 
@@ -49,19 +76,8 @@ namespace NewEggAccess.Services
 
 			while (true)
 			{
-				var request = new GetOrderInfoRequest(
-					new GetOrderInfoRequestBody(
-						pageIndex,
-						base.Config.OrdersPageSize,
-						new GetOrderInfoRequestCriteria()
-						{
-							Type = 0,
-							Status = (int)orderStatus,
-							OrderDateFrom = Misc.ConvertFromUtcToPstStr(startDateUtc),
-							OrderDateTo = Misc.ConvertFromUtcToPstStr(endDateUtc)
-						}));
-
-				var ordersPageServerResponse = await base.PutAsync(GetModifiedOrdersCommand(base.Config, base.Credentials, request.ToJson()), token, mark, (code, response) => false).ConfigureAwait(false);
+				var ordersPageServerResponse = await GetOrdersAsync(pageIndex, orderStatus, startDateUtc, endDateUtc,
+					mark, cancellationToken).ConfigureAwait(false);
 
 				if (ordersPageServerResponse.Error == null)
 				{
@@ -92,6 +108,25 @@ namespace NewEggAccess.Services
 			}
 
 			return orders.ToArray();
+		}
+
+		private async Task<Models.ServerResponse> GetOrdersAsync(int pageIndex, NewEggOrderStatusEnum orderStatus, DateTime startDateUtc, DateTime endDateUtc, Mark mark, CancellationToken cancellationToken)
+		{
+			var request = new GetOrderInfoRequest(
+						new GetOrderInfoRequestBody(
+							pageIndex,
+							base.Config.OrdersPageSize,
+							new GetOrderInfoRequestCriteria()
+							{
+								Type = 0,
+								Status = (int)orderStatus,
+								OrderDateFrom = Misc.ConvertFromUtcToPstStr(startDateUtc),
+								OrderDateTo = Misc.ConvertFromUtcToPstStr(endDateUtc)
+							}));
+
+			var ordersPageServerResponse = await base.PutAsync(GetModifiedOrdersCommand(base.Config, base.Credentials, request.ToJson()), 
+				cancellationToken, mark, (code, response) => false).ConfigureAwait(false);
+			return ordersPageServerResponse;
 		}
 	}
 }

@@ -52,6 +52,14 @@ namespace NewEggTests.Business
 			orders.Should().NotBeEmpty();
 		}
 
+		[Test]
+		public async Task AreNewEggCredentialsValid()
+		{
+			var result = await this._orderService.TryGetOrdersAsync(Mark.CreateNew(), CancellationToken.None);
+
+			result.Should().BeTrue();
+		}
+
 		private IHttpClient GetMock(string fileWithResponsePath)
 		{
 			var httpClientMock = Substitute.For<IHttpClient>();

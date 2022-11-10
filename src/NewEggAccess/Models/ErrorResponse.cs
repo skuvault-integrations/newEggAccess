@@ -4,9 +4,9 @@ namespace NewEggAccess.Models
 {
 	public class ErrorResponse
 	{
-		[ JsonProperty( "Code" ) ]
+		[JsonProperty("Code")]
 		public string Code { get; set; }
-		[ JsonProperty( "Message" ) ]
+		[JsonProperty("Message")]
 		public string Message { get; set; }
 	}
 }

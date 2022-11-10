@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace NewEggAccess.Services
 {
-	public interface INewEggOrdersService
+	public interface INewEggOrdersService : IThrottler
 	{
-		Throttler Throttler { get; }
+		Task<bool> TryGetOrdersAsync(Mark mark, CancellationToken cancellationToken);
 		Task<IEnumerable<NewEggOrder>> GetModifiedOrdersAsync(DateTime startDateUtc, DateTime endDateUtc, string countryCode, Mark mark, CancellationToken cancellationToken);
 	}
 }

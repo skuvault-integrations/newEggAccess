@@ -84,7 +84,6 @@
     <Compile Include="BaseRegularTest.cs" />
     <Compile Include="BaseTest.cs" />
     <Compile Include="BaseBusinessTest.cs" />
-    <Compile Include="Business\CredsTests.cs" />
     <Compile Include="Business\FeedsTests.cs" />
     <Compile Include="Business\ItemTests.cs" />
     <Compile Include="Business\OrderTests.cs" />
@@ -92,7 +91,6 @@
     <Compile Include="Regular\ItemTests.cs" />
     <Compile Include="DateTimeConversionTests.cs" />
     <Compile Include="OrderMapperTests.cs" />
-    <Compile Include="Regular\CredsTests.cs" />
     <Compile Include="Regular\OrderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateLimitTests.cs" />

@@ -14,10 +14,10 @@ namespace NewEggAccess.Configuration
 
 		public int OrdersPageSize { get; set; }
 
-		public NewEggConfig( NewEggPlatform platform, ThrottlingOptions throttlingOptions, NetworkOptions networkOptions )
+		public NewEggConfig(NewEggPlatform platform, ThrottlingOptions throttlingOptions, NetworkOptions networkOptions)
 		{
-			Condition.Requires( throttlingOptions, "throttlingOptions" ).IsNotNull();
-			Condition.Requires( networkOptions, "networkOptions" ).IsNotNull();
+			Condition.Requires(throttlingOptions, "throttlingOptions").IsNotNull();
+			Condition.Requires(networkOptions, "networkOptions").IsNotNull();
 
 			this.Platform = platform;
 			this.ThrottlingOptions = throttlingOptions;
@@ -25,7 +25,7 @@ namespace NewEggAccess.Configuration
 			this.OrdersPageSize = 100;
 		}
 
-		public NewEggConfig( NewEggPlatform platform ) : this( platform, ThrottlingOptions.NewEggDefaultOptions, NetworkOptions.NewEggDefaultOptions )
+		public NewEggConfig(NewEggPlatform platform) : this(platform, ThrottlingOptions.NewEggDefaultOptions, NetworkOptions.NewEggDefaultOptions)
 		{ }
 	}
 
@@ -34,10 +34,10 @@ namespace NewEggAccess.Configuration
 		public int MaxRequestsPerTimeInterval { get; private set; }
 		public int TimeIntervalInSec { get; private set; }
 
-		public ThrottlingOptions( int maxRequests, int timeIntervalInSec )
+		public ThrottlingOptions(int maxRequests, int timeIntervalInSec)
 		{
-			Condition.Requires( maxRequests, "maxRequests" ).IsGreaterOrEqual( 1 );
-			Condition.Requires( timeIntervalInSec, "timeIntervalInSec" ).IsGreaterOrEqual( 1 );
+			Condition.Requires(maxRequests, "maxRequests").IsGreaterOrEqual(1);
+			Condition.Requires(timeIntervalInSec, "timeIntervalInSec").IsGreaterOrEqual(1);
 
 			this.MaxRequestsPerTimeInterval = maxRequests;
 			this.TimeIntervalInSec = timeIntervalInSec;
@@ -47,7 +47,7 @@ namespace NewEggAccess.Configuration
 		{
 			get
 			{
-				return new ThrottlingOptions( 10000, 86400 );
+				return new ThrottlingOptions(10000, 86400);
 			}
 		}
 	}
@@ -59,12 +59,12 @@ namespace NewEggAccess.Configuration
 		public int DelayBetweenFailedRequestsInSec { get; private set; }
 		public int DelayFailRequestRate { get; private set; }
 
-		public NetworkOptions( int requestTimeoutMs, int retryAttempts, int delayBetweenFailedRequestsInSec, int delayFaileRequestRate )
+		public NetworkOptions(int requestTimeoutMs, int retryAttempts, int delayBetweenFailedRequestsInSec, int delayFaileRequestRate)
 		{
-			Condition.Requires( requestTimeoutMs, "requestTimeoutMs" ).IsGreaterThan( 0 );
-			Condition.Requires( retryAttempts, "retryAttempts" ).IsGreaterOrEqual( 0 );
-			Condition.Requires( delayBetweenFailedRequestsInSec, "delayBetweenFailedRequestsInSec" ).IsGreaterOrEqual( 0 );
-			Condition.Requires( delayFaileRequestRate, "delayFaileRequestRate" ).IsGreaterOrEqual( 0 );
+			Condition.Requires(requestTimeoutMs, "requestTimeoutMs").IsGreaterThan(0);
+			Condition.Requires(retryAttempts, "retryAttempts").IsGreaterOrEqual(0);
+			Condition.Requires(delayBetweenFailedRequestsInSec, "delayBetweenFailedRequestsInSec").IsGreaterOrEqual(0);
+			Condition.Requires(delayFaileRequestRate, "delayFaileRequestRate").IsGreaterOrEqual(0);
 
 			this.RequestTimeoutMs = requestTimeoutMs;
 			this.RetryAttempts = retryAttempts;
@@ -76,7 +76,7 @@ namespace NewEggAccess.Configuration
 		{
 			get
 			{
-				return new NetworkOptions( 5 * 60 * 1000, 10, 5, 20 );
+				return new NetworkOptions(5 * 60 * 1000, 10, 5, 20);
 			}
 		}
 	}

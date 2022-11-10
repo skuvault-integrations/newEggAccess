@@ -21,7 +21,7 @@ namespace NewEggAccess.Services.Business
 		}
 
 		/// <summary>
-		///	Get sku's inventory on specified warehouseLocation
+		/// Get sku's inventory on specified warehouseLocation
 		/// </summary>
 		/// <param name="sku"></param>
 		/// <param name="warehouseLocationCode"></param>
@@ -51,7 +51,7 @@ namespace NewEggAccess.Services.Business
 		}
 
 		/// <summary>
-		///	Update sku's quantity
+		/// Update sku's quantity
 		/// </summary>
 		/// <param name="sku"></param>
 		/// <param name="warehouseLocation"></param>
