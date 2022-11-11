@@ -4,7 +4,7 @@ using NewEggAccess.Models.Items;
 
 namespace NewEggAccess.Models.Feeds
 {
-	public class UpdateInventoryFeedRequestBody
+    public class UpdateInventoryFeedRequestBody
 	{
 		public InventoryUpdateFeed Inventory { get; set; }
 	}

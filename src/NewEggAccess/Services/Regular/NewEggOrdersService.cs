@@ -3,6 +3,10 @@ using NewEggAccess.Models.Commands.Business;
 
 namespace NewEggAccess.Services.Regular
 {
+	/// <summary>
+	/// Service for orders sync 
+	/// (specific for NewEgg Regular Account - newegg.com)
+	/// </summary>
 	public class NewEggOrdersService : NewEggBaseOrdersService
 	{
 		public NewEggOrdersService(NewEggConfig config, NewEggCredentials credentials) : base(config, credentials)

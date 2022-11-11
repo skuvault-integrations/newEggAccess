@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using NewEggAccess.Models;
+using NewEggAccess.Models.Items;
 using NewEggAccess.Services;
 using NewEggAccess.Services.Regular;
 using NewEggAccess.Shared;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace NewEggTests.Regular
 {
-	[TestFixture]
+    [TestFixture]
 	public class ItemTests : BaseRegularTest
 	{
 		private INewEggItemsService _itemsService;

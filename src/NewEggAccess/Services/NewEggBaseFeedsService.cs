@@ -11,6 +11,10 @@ using Newtonsoft.Json;
 
 namespace NewEggAccess.Services
 {
+	/// <summary>
+	/// Service for feeds sync 
+	/// (common for NewEgg Regular and Business Accounts)
+	/// </summary>
 	public class NewEggBaseFeedsService : BaseService
 	{
 		public NewEggBaseFeedsService(NewEggConfig config, NewEggCredentials credentials) : base(credentials, config)
@@ -18,7 +22,7 @@ namespace NewEggAccess.Services
 		}
 
 		/// <summary>
-		///	Submit feed with inventory data (batch update items inventory)
+		/// Submit feed with inventory data (batch update items inventory)
 		/// </summary>
 		/// <param name="inventory"></param>
 		/// <param name="token"></param>
@@ -44,7 +48,7 @@ namespace NewEggAccess.Services
 		}
 
 		/// <summary>
-		///	Get feed status
+		/// Get feed status
 		/// </summary>
 		/// <param name="feedId">Feed id</param>
 		/// <param name="token">Cancellation token</param>

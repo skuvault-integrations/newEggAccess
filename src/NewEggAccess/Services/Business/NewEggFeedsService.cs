@@ -11,6 +11,10 @@ using NewEggAccess.Models.Commands;
 
 namespace NewEggAccess.Services.Business
 {
+	/// <summary>
+	/// Service for feeds sync 
+	/// (specific for NewEgg Business Account - neweggbusiness.com)
+	/// </summary>
 	public class NewEggFeedsService : NewEggBaseFeedsService, INewEggFeedsService
 	{
 		public NewEggFeedsService(NewEggConfig config, NewEggCredentials credentials) : base(config, credentials)
@@ -18,7 +22,7 @@ namespace NewEggAccess.Services.Business
 		}
 
 		/// <summary>
-		///	Submit feed with inventory data (batch update items inventory)
+		/// Submit feed with inventory data (batch update items inventory)
 		/// </summary>
 		/// <param name="inventory"></param>
 		/// <param name="token"></param>
@@ -33,7 +37,7 @@ namespace NewEggAccess.Services.Business
 		}
 
 		/// <summary>
-		///	Get feed status
+		/// Get feed status
 		/// </summary>
 		/// <param name="feedId">Feed id</param>
 		/// <param name="token">Cancellation token</param>

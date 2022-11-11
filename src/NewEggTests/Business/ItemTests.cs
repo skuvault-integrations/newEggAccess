@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using NewEggAccess.Models;
+using NewEggAccess.Models.Items;
 using NewEggAccess.Services;
 using NewEggAccess.Services.Business;
 using NewEggAccess.Shared;

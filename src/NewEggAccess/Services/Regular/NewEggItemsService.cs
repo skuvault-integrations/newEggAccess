@@ -7,12 +7,16 @@ using NewEggAccess.Configuration;
 using NewEggAccess.Models;
 using NewEggAccess.Models.Commands.Regular;
 using NewEggAccess.Models.Items;
-using NewEggAccess.Models.Regular.Items;
+using NewEggAccess.Models.Items.Regular;
 using NewEggAccess.Shared;
 using Newtonsoft.Json;
 
 namespace NewEggAccess.Services.Regular
 {
+	/// <summary>
+	/// Service for inventory sync 
+	/// (specific for NewEgg Regular Account - newegg.com)
+	/// </summary>
 	public class NewEggItemsService : BaseService, INewEggItemsService
 	{
 		const int SellerPartNumberRequestType = 1;

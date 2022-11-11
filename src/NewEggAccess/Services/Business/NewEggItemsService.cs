@@ -9,9 +9,14 @@ using NewEggAccess.Models.Commands.Business;
 using NewEggAccess.Models.Business.Items;
 using NewEggAccess.Shared;
 using Newtonsoft.Json;
+using NewEggAccess.Models.Items.Business;
 
 namespace NewEggAccess.Services.Business
 {
+	/// <summary>
+	/// Service for inventory sync 
+	/// (specific for NewEgg Business Account - neweggbusiness.com)
+	/// </summary>
 	public class NewEggItemsService : BaseService, INewEggItemsService
 	{
 		const int SellerPartNumberRequestType = 1;

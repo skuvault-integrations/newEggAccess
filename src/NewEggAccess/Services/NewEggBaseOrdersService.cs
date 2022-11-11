@@ -12,12 +12,25 @@ using Newtonsoft.Json;
 
 namespace NewEggAccess.Services
 {
+	/// <summary>
+	/// Service for orders sync 
+	/// (common for NewEgg Regular and Business Accounts)
+	/// </summary>
 	public abstract class NewEggBaseOrdersService : BaseService, INewEggOrdersService
 	{
 		public NewEggBaseOrdersService(NewEggConfig config, NewEggCredentials credentials) : base(credentials, config)
 		{
 		}
 
+		/// <summary>
+		/// Getting a list of modified orders within the period
+		/// </summary>
+		/// <param name="startDateUtc"></param>
+		/// <param name="endDateUtc"></param>
+		/// <param name="countryCode"></param>
+		/// <param name="mark"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
 		public async Task<IEnumerable<NewEggOrder>> GetModifiedOrdersAsync(DateTime startDateUtc, DateTime endDateUtc,
 			string countryCode, Mark mark, CancellationToken cancellationToken)
 		{

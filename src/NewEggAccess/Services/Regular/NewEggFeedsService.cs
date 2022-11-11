@@ -11,6 +11,10 @@ using System.Threading.Tasks;
 
 namespace NewEggAccess.Services.Regular
 {
+	/// <summary>
+	/// Service for feeds sync 
+	/// (specific for NewEgg Regular Account - newegg.com)
+	/// </summary>
 	public class NewEggFeedsService : NewEggBaseFeedsService, INewEggFeedsService
 	{
 		public NewEggFeedsService(NewEggConfig config, NewEggCredentials credentials) : base(config, credentials)
@@ -27,7 +31,8 @@ namespace NewEggAccess.Services.Regular
 		public async Task<string> UpdateItemsInventoryInBulkAsync(IEnumerable<InventoryUpdateFeedItem> inventory, Mark mark, CancellationToken cancellationToken)
 		{
 			Condition.Requires(inventory, "inventory").IsNotEmpty();
-			var request = new NewEggEnvelopeWrapper<UpdateInventoryFeedRequestBody>() {
+			var request = new NewEggEnvelopeWrapper<UpdateInventoryFeedRequestBody>()
+			{
 				NeweggEnvelope = new NewEggEnvelope<UpdateInventoryFeedRequestBody>("Inventory", new UpdateInventoryFeedRequestBody() { Inventory = new InventoryUpdateFeed(inventory) })
 			};
 
