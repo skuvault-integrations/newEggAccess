@@ -12,11 +12,6 @@ namespace NewEggTests
 	{
 		protected NewEggConfig Config { get; private set; }
 		protected NewEggCredentials Credentials { get; private set; }
-
-		////protected const string TestSku1 = "testSku1";
-		////protected const string TestSku2 = "testSku2";
-		////protected const string WarehouseLocationCountryCode = "USA";
-
 		protected abstract string TestSku1 { get; }
 		protected abstract string TestSku2 { get; }
 		protected abstract string WarehouseLocationCountryCode { get; }

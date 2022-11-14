@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace NewEggTests.Business
 {
 	[TestFixture]
-	public class OrderTests : BaseBusinessTest
+	public class OrdersServiceTests : BaseBusinessTest
 	{
 		private NewEggOrdersService _orderService;
 		private DateTime _startDate = DateTime.Now.AddMonths(-4);
@@ -26,6 +26,7 @@ namespace NewEggTests.Business
 		}
 
 		[Test]
+		[Explicit]
 		public async Task GetModifiedOrders()
 		{
 			var orders = await this._orderService.GetModifiedOrdersAsync(_startDate, _endDate, null, Mark.CreateNew(), CancellationToken.None);
@@ -34,6 +35,7 @@ namespace NewEggTests.Business
 		}
 
 		[Test]
+		[Explicit]
 		public async Task GetModifiedOrdersBySmallPage()
 		{
 			base.Config.OrdersPageSize = 1;
@@ -43,6 +45,7 @@ namespace NewEggTests.Business
 		}
 
 		[Test]
+		[Explicit]
 		public async Task GetModifiedOrdersMockResponse()
 		{
 			this._orderService.HttpClient = this.GetMock("GetOrderInformation.json");
@@ -53,6 +56,7 @@ namespace NewEggTests.Business
 		}
 
 		[Test]
+		[Explicit]
 		public async Task AreNewEggCredentialsValid()
 		{
 			var result = await this._orderService.TryGetOrdersAsync(Mark.CreateNew(), CancellationToken.None);

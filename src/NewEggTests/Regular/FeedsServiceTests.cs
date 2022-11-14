@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using NewEggAccess.Models.Feeds;
 using NewEggAccess.Services;
-using NewEggAccess.Services.Business;
+using NewEggAccess.Services.Regular;
 using NewEggAccess.Shared;
 using NUnit.Framework;
 using System;
@@ -9,10 +9,10 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace NewEggTests.Business
+namespace NewEggTests.Regular
 {
 	[TestFixture]
-	public class FeedsTests : BaseBusinessTest
+	public class FeedsServiceTests : BaseRegularTest
 	{
 		private INewEggFeedsService _feedsService;
 
@@ -23,13 +23,14 @@ namespace NewEggTests.Business
 		}
 
 		[Test]
+		[Explicit]
 		public async Task UpdateItemQuantitiesInBulkAsync()
 		{
 			var rand = new Random();
 			var inventory = new List<InventoryUpdateFeedItem>
 			{
-				new InventoryUpdateFeedItem( TestSku1, rand.Next( 1, 100 ) ),
-				new InventoryUpdateFeedItem( TestSku2, rand.Next( 1, 100 ) )
+				new InventoryUpdateFeedItem( TestSku1, rand.Next( 1, 100 ), WarehouseLocationCountryCode ),
+				new InventoryUpdateFeedItem( TestSku2, rand.Next( 1, 100 ), WarehouseLocationCountryCode )
 			};
 
 			var feedId = await this._feedsService.UpdateItemsInventoryInBulkAsync(inventory, Mark.CreateNew(), CancellationToken.None);
@@ -38,16 +39,15 @@ namespace NewEggTests.Business
 		}
 
 		[Test]
+		[Explicit]
 		public async Task UpdateItemQuantitiesThereSomeItemsAreNotExist()
 		{
-			var testSkuNotExist = "NotExistedSku";
 			var rand = new Random();
 			var inventory = new List<InventoryUpdateFeedItem>
 			{
-				new InventoryUpdateFeedItem( TestSku1, rand.Next( 1, 100 ) ),
-				new InventoryUpdateFeedItem( TestSku2, rand.Next( 1, 100 ) ),
-				new InventoryUpdateFeedItem( testSkuNotExist, 1 ),
-				new InventoryUpdateFeedItem( testSkuNotExist, 1 )
+				new InventoryUpdateFeedItem( TestSku1, rand.Next( 1, 100 ), WarehouseLocationCountryCode ),
+				new InventoryUpdateFeedItem( TestSku2, rand.Next( 1, 100 ), WarehouseLocationCountryCode ),
+				new InventoryUpdateFeedItem( new Guid().ToString(), rand.Next( 1, 100 ), WarehouseLocationCountryCode )
 			};
 
 			var feedId = await this._feedsService.UpdateItemsInventoryInBulkAsync(inventory, Mark.CreateNew(), CancellationToken.None);
@@ -56,6 +56,7 @@ namespace NewEggTests.Business
 		}
 
 		[Test]
+		[Explicit]
 		public async Task GetFeedStatusAsync()
 		{
 			var feedId = await GetFeedIdAsync();
