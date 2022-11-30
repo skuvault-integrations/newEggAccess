@@ -1,15 +1,10 @@
-﻿using CuttingEdge.Conditions;
-using NewEggAccess.Configuration;
+﻿using NewEggAccess.Configuration;
 
 namespace NewEggAccess.Models.Commands
 {
-	public class GetFeedStatusCommand : NewEggCommand
+	public class GetFeedStatusCommand : BaseNewEggCommand
 	{
-		public GetFeedStatusCommand( NewEggConfig config, NewEggCredentials credentials, string payload ) : base( config, credentials, GetFeedStatusServiceUrl )
-		{
-			Condition.Requires( payload, "payload" ).IsNotNullOrWhiteSpace();
-
-			this.Payload = payload;
-		}
+		public GetFeedStatusCommand(NewEggConfig config, NewEggCredentials credentials, string payload) : base(config, credentials, payload) { }
+		public override string RelativeUrl => "/datafeedmgmt/feeds/status";
 	}
 }

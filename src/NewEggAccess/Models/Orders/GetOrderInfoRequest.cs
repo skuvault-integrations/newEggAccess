@@ -1,7 +1,4 @@
 ﻿using CuttingEdge.Conditions;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NewEggAccess.Models.Orders
 {
@@ -10,9 +7,9 @@ namespace NewEggAccess.Models.Orders
 		public string OperationType { get; private set; }
 		public GetOrderInfoRequestBody RequestBody { get; private set; }
 
-		public GetOrderInfoRequest( GetOrderInfoRequestBody body )
+		public GetOrderInfoRequest(GetOrderInfoRequestBody body)
 		{
-			Condition.Requires( body, "body" ).IsNotNull();
+			Condition.Requires(body, "body").IsNotNull();
 
 			this.OperationType = "GetOrderInfoRequest";
 			this.RequestBody = body;
@@ -25,11 +22,11 @@ namespace NewEggAccess.Models.Orders
 		public int PageSize { get; private set; }
 		public GetOrderInfoRequestCriteria RequestCriteria { get; private set; }
 
-		public GetOrderInfoRequestBody( int pageIndex, int pageSize, GetOrderInfoRequestCriteria criteria )
+		public GetOrderInfoRequestBody(int pageIndex, int pageSize, GetOrderInfoRequestCriteria criteria)
 		{
-			Condition.Requires( pageIndex, "pageIndex" ).IsGreaterOrEqual( 1 );
-			Condition.Requires( pageSize, "pageSize" ).IsGreaterThan( 0 );
-			Condition.Requires( criteria, "criteria" ).IsNotNull();
+			Condition.Requires(pageIndex, "pageIndex").IsGreaterOrEqual(1);
+			Condition.Requires(pageSize, "pageSize").IsGreaterThan(0);
+			Condition.Requires(criteria, "criteria").IsNotNull();
 
 			this.PageIndex = pageIndex;
 			this.PageSize = pageSize;

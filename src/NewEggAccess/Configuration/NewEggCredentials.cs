@@ -8,11 +8,11 @@ namespace NewEggAccess.Configuration
 		public string ApiKey { get; private set; }
 		public string SecretKey { get; private set; }
 
-		public NewEggCredentials( string sellerId, string apiKey, string secretKey )
+		public NewEggCredentials(string sellerId, string apiKey, string secretKey)
 		{
-			Condition.Requires( sellerId, "sellerId" ).IsNotNullOrWhiteSpace();
-			Condition.Requires( apiKey, "apiKey" ).IsNotNullOrWhiteSpace();
-			Condition.Requires( secretKey, "secretKey" ).IsNotNullOrWhiteSpace();
+			Condition.Requires(sellerId, "sellerId").IsNotNullOrWhiteSpace();
+			Condition.Requires(apiKey, "apiKey").IsNotNullOrWhiteSpace();
+			Condition.Requires(secretKey, "secretKey").IsNotNullOrWhiteSpace();
 
 			this.SellerId = sellerId;
 			this.ApiKey = apiKey;

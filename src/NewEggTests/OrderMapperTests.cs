@@ -6,17 +6,17 @@ using System.Linq;
 
 namespace NewEggTests
 {
-	[ TestFixture ]
+	[TestFixture]
 	public class OrderMapperTests
 	{
-		[ Test ]
+		[Test]
 		public void ToSVOrder()
 		{
 			var order = new Order()
 			{
 				OrderNumber = "417171",
 				SellerOrderNumber = "21919191",
-				OrderDate = new DateTime( 2020, 03, 16, 19, 0, 0 ),
+				OrderDate = new DateTime(2020, 03, 16, 19, 0, 0),
 				OrderStatus = 0,
 				CustomerName = "WY SD",
 				CustomerPhoneNumber = "123-223-3223",
@@ -53,7 +53,7 @@ namespace NewEggTests
 							ExtendVAT = 0.15M
 						},
 					},
-				PackageInfoList = new PackageInfo[] { 
+				PackageInfoList = new PackageInfo[] {
 						new PackageInfo()
 						{
 							ShipCarrier = "UPS"
@@ -64,37 +64,37 @@ namespace NewEggTests
 			var svOrder = order.ToSVOrder();
 
 			svOrder.Should().NotBeNull();
-			svOrder.Id.Should().Be( order.OrderNumber );
-			svOrder.Number.Should().Be( order.SellerOrderNumber );
-			svOrder.Status.Should().Be( NewEggOrderStatusEnum.Unshipped );
-			svOrder.OrderDateUtc.Should().Be( order.OrderDate.AddHours( -8 ) );
-			svOrder.Total.Should().Be( order.OrderTotalAmount );
-			svOrder.DiscountAmount.Should().Be( order.DiscountAmount );
+			svOrder.Id.Should().Be(order.OrderNumber);
+			svOrder.Number.Should().Be(order.SellerOrderNumber);
+			svOrder.Status.Should().Be(NewEggOrderStatusEnum.Unshipped);
+			svOrder.OrderDateUtc.Should().Be(order.OrderDate.AddHours(-8));
+			svOrder.Total.Should().Be(order.OrderTotalAmount);
+			svOrder.DiscountAmount.Should().Be(order.DiscountAmount);
 
 			svOrder.ShippingInfo.Should().NotBeNull();
-			svOrder.ShippingInfo.Carrier.Should().Be( order.PackageInfoList.First().ShipCarrier );
-			svOrder.ShippingInfo.ShippingCharge.Should().Be( order.ShippingAmount );
-			
+			svOrder.ShippingInfo.Carrier.Should().Be(order.PackageInfoList.First().ShipCarrier);
+			svOrder.ShippingInfo.ShippingCharge.Should().Be(order.ShippingAmount);
+
 			svOrder.ShippingInfo.Address.Should().NotBeNull();
-			svOrder.ShippingInfo.Address.Line1.Should().Be( order.ShipToAddress1 );
-			svOrder.ShippingInfo.Address.City.Should().Be( order.ShipToCityName );
-			svOrder.ShippingInfo.Address.State.Should().Be( order.ShipToStateCode );
-			svOrder.ShippingInfo.Address.CountryCode.Should().Be( order.ShipToCountryCode );
+			svOrder.ShippingInfo.Address.Line1.Should().Be(order.ShipToAddress1);
+			svOrder.ShippingInfo.Address.City.Should().Be(order.ShipToCityName);
+			svOrder.ShippingInfo.Address.State.Should().Be(order.ShipToStateCode);
+			svOrder.ShippingInfo.Address.CountryCode.Should().Be(order.ShipToCountryCode);
 
 			svOrder.ShippingInfo.ContactInfo.Should().NotBeNull();
-			svOrder.ShippingInfo.ContactInfo.FirstName.Should().Be( order.ShipToFirstName );
-			svOrder.ShippingInfo.ContactInfo.LastName.Should().Be( order.ShipToLastName );
-			svOrder.ShippingInfo.ContactInfo.CompanyName.Should().Be( order.ShipToCompany );
-			svOrder.ShippingInfo.ContactInfo.PhoneNumber.Should().Be( order.CustomerPhoneNumber );
-			svOrder.ShippingInfo.ContactInfo.EmailAddress.Should().Be( order.CustomerEmailAddress );
+			svOrder.ShippingInfo.ContactInfo.FirstName.Should().Be(order.ShipToFirstName);
+			svOrder.ShippingInfo.ContactInfo.LastName.Should().Be(order.ShipToLastName);
+			svOrder.ShippingInfo.ContactInfo.CompanyName.Should().Be(order.ShipToCompany);
+			svOrder.ShippingInfo.ContactInfo.PhoneNumber.Should().Be(order.CustomerPhoneNumber);
+			svOrder.ShippingInfo.ContactInfo.EmailAddress.Should().Be(order.CustomerEmailAddress);
 
-			svOrder.Items.Count().Should().Be( 2 );
-			svOrder.Items.First().Sku.Should().Be( order.ItemInfoList.First().SellerPartNumber );
-			svOrder.Items.First().Quantity.Should().Be( order.ItemInfoList.First().OrderedQty );
-			svOrder.Items.First().UnitPrice.Should().Be( order.ItemInfoList.First().UnitPrice );
-			svOrder.Items.First().SalesTax.Should().Be( order.ItemInfoList.First().ExtendSalesTax );
-			svOrder.Items.First().Vat.Should().Be( order.ItemInfoList.First().ExtendVAT );
-			svOrder.Items.First().ShippingCharge.Should().Be( order.ItemInfoList.First().ExtendShippingCharge );
+			svOrder.Items.Count().Should().Be(2);
+			svOrder.Items.First().Sku.Should().Be(order.ItemInfoList.First().SellerPartNumber);
+			svOrder.Items.First().Quantity.Should().Be(order.ItemInfoList.First().OrderedQty);
+			svOrder.Items.First().UnitPrice.Should().Be(order.ItemInfoList.First().UnitPrice);
+			svOrder.Items.First().SalesTax.Should().Be(order.ItemInfoList.First().ExtendSalesTax);
+			svOrder.Items.First().Vat.Should().Be(order.ItemInfoList.First().ExtendVAT);
+			svOrder.Items.First().ShippingCharge.Should().Be(order.ItemInfoList.First().ExtendShippingCharge);
 		}
 	}
 }
