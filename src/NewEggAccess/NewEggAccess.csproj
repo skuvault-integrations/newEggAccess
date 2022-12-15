@@ -7,9 +7,9 @@
     <Description>NewEgg webservices API wrapper</Description>
     <Copyright>SkuVault © 2020</Copyright>
     <PackageLicenseUrl></PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/skuvault/newEggAccess</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/skuvault/newEggAccess</RepositoryUrl>
-    <Version>1.2.0.1-alpha</Version>
+    <PackageProjectUrl>https://github.com/skuvault-integrations/newEggAccess</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/skuvault-integrations/newEggAccess</RepositoryUrl>
+    <Version>1.2.0.1</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AssemblyVersion>1.2.0.1</AssemblyVersion>
     <FileVersion>1.2.0.1</FileVersion>
