@@ -16,8 +16,8 @@ namespace NewEggTests.Regular
 	public class OrdersServiceTests : BaseRegularTest
 	{
 		private NewEggBaseOrdersService _orderService;
-		private DateTime _startDate = new DateTime(2022, 1, 1);
-		private DateTime _endDate = new DateTime(2022, 09, 20);
+		private DateTime _startDate = new DateTime(2022, 01, 01);
+		private DateTime _endDate = new DateTime(2023, 01, 01);
 
 		[SetUp]
 		public void Init()

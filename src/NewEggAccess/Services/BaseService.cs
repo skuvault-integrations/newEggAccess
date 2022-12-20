@@ -53,7 +53,7 @@ namespace NewEggAccess.Services
 			this.Credentials = credentials;
 			this.Config = config;
 
-			this._throttler = new Throttler(config.ThrottlingOptions.MaxRequestsPerTimeInterval, config.ThrottlingOptions.TimeIntervalInSec);
+			this._throttler = new Throttler(config.ThrottlingOptions.MaxRequestsPerTimeInterval, config.ThrottlingOptions.TimeIntervalInSec, new Delayer());
 			this.HttpClient = new DefaultHttpClient();
 			this.HttpClient.SetAcceptHeader(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -178,30 +178,30 @@ namespace NewEggAccess.Services
 		{
 			var limits = GetRateLimit(response);
 
-			if (limits != null)
-			{
-				this._throttler.RateLimit.Limit = limits.Limit;
-				this._throttler.RateLimit.Remaining = limits.Remaining;
-				this._throttler.RateLimit.ResetTime = limits.ResetTime;
+			if (string.IsNullOrEmpty(limits.RateLimit)
+			    && string.IsNullOrEmpty(limits.RateRemaining)
+			    && string.IsNullOrEmpty(limits.RateResetTime)) return;
 
-				NewEggLogger.LogTrace(String.Format("{0}, Total calls: {1}, Remaining calls: {2}, Reset time: {3}", info, limits.Limit, limits.Remaining, limits.ResetTime));
-			}
+			_throttler.SetRateLimit(limits.RateLimit, limits.RateRemaining, limits.RateResetTime);
+
+			NewEggLogger.LogTrace(string.Format("{0}, Total calls: {1}, Remaining calls: {2}, Reset time: {3}", info,
+				limits.RateLimit, limits.RateRemaining, limits.RateResetTime));
 		}
 
-		private NewEggRateLimit GetRateLimit(IHttpResponseMessage response)
+		private (string RateLimit, string RateRemaining, string RateResetTime) GetRateLimit(IHttpResponseMessage response)
 		{
 			var rateLimit = response.GetHeaderValue("X-RateLimit-Limit");
 			var rateRemaining = response.GetHeaderValue("X-RateLimit-Remaining");
-			var rateResetTime = response.GetHeaderValue("X-ratelimit-resettime");
+			var rateResetTime = response.GetHeaderValue("X-RateLimit-ResetTime");
 
 			if (!string.IsNullOrWhiteSpace(rateLimit)
 				&& !string.IsNullOrWhiteSpace(rateRemaining)
 				&& !string.IsNullOrWhiteSpace(rateResetTime))
 			{
-				return new NewEggRateLimit(rateLimit, rateRemaining, rateResetTime);
+				return (rateLimit, rateRemaining, rateResetTime);
 			}
 
-			return null;
+			return (null, null, null);
 		}
 
 		protected Task<T> ThrottleRequest<T>(string url, string payload, Mark mark, Func<CancellationToken, Task<T>> processor, CancellationToken token)
