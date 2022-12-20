@@ -178,17 +178,15 @@ namespace NewEggAccess.Services
 		{
 			var limits = GetRateLimit(response);
 
-			if (string.IsNullOrEmpty(limits.RateLimit)
-			    && string.IsNullOrEmpty(limits.RateRemaining)
-			    && string.IsNullOrEmpty(limits.RateResetTime)) return;
+			if (limits == null) return;
 
-			_throttler.SetRateLimit(limits.RateLimit, limits.RateRemaining, limits.RateResetTime);
+			_throttler.SetRateLimit(limits);
 
 			NewEggLogger.LogTrace(string.Format("{0}, Total calls: {1}, Remaining calls: {2}, Reset time: {3}", info,
-				limits.RateLimit, limits.RateRemaining, limits.RateResetTime));
+				limits.Limit, limits.Remaining, limits.ResetTime));
 		}
 
-		private (string RateLimit, string RateRemaining, string RateResetTime) GetRateLimit(IHttpResponseMessage response)
+		private NewEggRateLimit GetRateLimit(IHttpResponseMessage response)
 		{
 			var rateLimit = response.GetHeaderValue("X-RateLimit-Limit");
 			var rateRemaining = response.GetHeaderValue("X-RateLimit-Remaining");
@@ -198,10 +196,10 @@ namespace NewEggAccess.Services
 				&& !string.IsNullOrWhiteSpace(rateRemaining)
 				&& !string.IsNullOrWhiteSpace(rateResetTime))
 			{
-				return (rateLimit, rateRemaining, rateResetTime);
+				return new NewEggRateLimit(rateLimit, rateRemaining, rateResetTime);
 			}
 
-			return (null, null, null);
+			return null;
 		}
 
 		protected Task<T> ThrottleRequest<T>(string url, string payload, Mark mark, Func<CancellationToken, Task<T>> processor, CancellationToken token)

@@ -34,10 +34,10 @@ namespace NewEggAccess.Throttling
 			_defaultQuotaRestoreTimeInSeconds = quotaRestoreTimeInSeconds;
 			RateLimit = new NewEggRateLimit(maxQuota, maxQuota, GetCurrentTimeInPst().AddSeconds(_defaultQuotaRestoreTimeInSeconds));
 		}
-
-		public void SetRateLimit(string limit, string remaining, string resetTime)
+		
+		public void SetRateLimit(NewEggRateLimit rateLimit)
 		{
-			RateLimit = new NewEggRateLimit(limit, remaining, resetTime);
+			RateLimit = rateLimit;
 		}
 		
 		public async Task< TResult > ExecuteAsync< TResult >( Func< Task< TResult > > funcToThrottle )

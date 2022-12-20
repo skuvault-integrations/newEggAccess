@@ -95,7 +95,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateLimitTests.cs" />
     <Compile Include="TestCredentials.cs" />
-    <Compile Include="Throttling\ImmediateDelayer.cs" />
     <Compile Include="Throttling\ThrottlerTest.cs" />
   </ItemGroup>
   <ItemGroup>
