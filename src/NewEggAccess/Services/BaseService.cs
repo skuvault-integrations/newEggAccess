@@ -186,8 +186,7 @@ namespace NewEggAccess.Services
 
 			_throttler.SetRateLimit(limits);
 
-			NewEggLogger.LogTrace(string.Format("{0}, Total calls: {1}, Remaining calls: {2}, Reset time: {3}", info,
-				limits.Limit, limits.Remaining, limits.ResetTime));
+			NewEggLogger.LogTrace($"{info}, Total calls: {limits.Limit}, Remaining calls: {limits.Remaining}, Reset time: {limits.ResetTime}");
 		}
 
 		private NewEggRateLimit GetRateLimit(IHttpResponseMessage response)

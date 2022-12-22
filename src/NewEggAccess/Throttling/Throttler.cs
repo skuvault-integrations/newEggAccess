@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 using NewEggAccess.Shared;
 
@@ -60,7 +59,7 @@ namespace NewEggAccess.Throttling
 				if( RateLimit.Remaining > 0 )
 				{
 #if DEBUG
-					Trace.WriteLine($"[{ DateTime.Now }] We have quota remains { RateLimit.Remaining }. Continue work" );
+					NewEggLogger.LogTrace($"[{ DateTime.Now }] We have quota remains { RateLimit.Remaining }. Continue work" );
 #endif
 					return;
 				}
@@ -68,7 +67,7 @@ namespace NewEggAccess.Throttling
 
 			var quotaRestoreTime = GetQuotaRestoreTime();
 #if DEBUG
-			Trace.WriteLine($"[{ DateTime.Now }] Quota remain { RateLimit.Remaining }. Waiting { quotaRestoreTime.TotalSeconds } seconds to continue" );
+			NewEggLogger.LogTrace($"[{ DateTime.Now }] Quota remain { RateLimit.Remaining }. Waiting { quotaRestoreTime.TotalSeconds } seconds to continue" );
 #endif
 
 			await _delayer.Delay( quotaRestoreTime ).ConfigureAwait( false );
@@ -78,7 +77,6 @@ namespace NewEggAccess.Throttling
 		{
 			// We should use PST time because NewEgg works in this time zone: https://developer.newegg.com/newegg_marketplace_api/newegg_marketplace_api_endpoints_and_time_standard/
 			var currentTimeInPst = GetCurrentTimeInPst();
-			// 638072646400000000
 			return RateLimit.ResetTime > currentTimeInPst
 				? RateLimit.ResetTime - currentTimeInPst
 				: TimeSpan.FromSeconds(_defaultQuotaRestoreTimeInSeconds);
