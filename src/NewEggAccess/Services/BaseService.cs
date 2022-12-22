@@ -53,7 +53,11 @@ namespace NewEggAccess.Services
 			this.Credentials = credentials;
 			this.Config = config;
 
-			this._throttler = new Throttler(config.ThrottlingOptions.MaxRequestsPerTimeInterval, config.ThrottlingOptions.TimeIntervalInSec, new Delayer());
+			this._throttler = new Throttler(
+				config.ThrottlingOptions.MaxRequestsPerTimeInterval,
+				config.ThrottlingOptions.TimeIntervalInSec,
+				new Delayer(),
+				new DateTimeProvider());
 			this.HttpClient = new DefaultHttpClient();
 			this.HttpClient.SetAcceptHeader(new MediaTypeWithQualityHeaderValue("application/json"));
 
