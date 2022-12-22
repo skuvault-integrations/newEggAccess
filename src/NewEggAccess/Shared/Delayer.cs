@@ -1,9 +1,7 @@
 using System;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace NewEggAccess.Throttling
+namespace NewEggAccess.Shared
 {
 	/// <summary>
 	/// Abstraction for delaying execution according to unit testing best practices:

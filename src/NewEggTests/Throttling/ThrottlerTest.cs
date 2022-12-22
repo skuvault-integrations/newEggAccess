@@ -57,7 +57,7 @@ namespace NewEggTests.Throttling
 			// Arrange
 			var utcNow = DateTime.UtcNow;
 			
-			// we should truncate milliseconds because NewEgg doesn't work with it
+			// we should truncate milliseconds because NewEgg returns time as string without milliseconds in the corresponding header
 			utcNow = new DateTime(utcNow.Ticks - utcNow.Ticks % TimeSpan.TicksPerSecond, utcNow.Kind);
 			const int timeIntervalInSec = 30;
 			var currentTimeInPst = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(utcNow, "Pacific Standard Time");
