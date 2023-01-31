@@ -9,8 +9,6 @@ namespace NewEggAccess.Throttling
 		public int Remaining { get; set; }
 		public DateTime ResetTime { get; set; }
 
-		public static NewEggRateLimit Unknown = new NewEggRateLimit( 0, 0, default( DateTime ) );
-
 		public NewEggRateLimit( string limitRaw, string remainingRaw, string resetTimeRaw )
 		{
 			this.Limit = TryParseValue( limitRaw );

@@ -53,7 +53,11 @@ namespace NewEggAccess.Services
 			this.Credentials = credentials;
 			this.Config = config;
 
-			this._throttler = new Throttler(config.ThrottlingOptions.MaxRequestsPerTimeInterval, config.ThrottlingOptions.TimeIntervalInSec);
+			this._throttler = new Throttler(
+				config.ThrottlingOptions.MaxRequestsPerTimeInterval,
+				config.ThrottlingOptions.TimeIntervalInSec,
+				new Delayer(),
+				new DateTimeProvider());
 			this.HttpClient = new DefaultHttpClient();
 			this.HttpClient.SetAcceptHeader(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -178,21 +182,18 @@ namespace NewEggAccess.Services
 		{
 			var limits = GetRateLimit(response);
 
-			if (limits != null)
-			{
-				this._throttler.RateLimit.Limit = limits.Limit;
-				this._throttler.RateLimit.Remaining = limits.Remaining;
-				this._throttler.RateLimit.ResetTime = limits.ResetTime;
+			if (limits == null) return;
 
-				NewEggLogger.LogTrace(String.Format("{0}, Total calls: {1}, Remaining calls: {2}, Reset time: {3}", info, limits.Limit, limits.Remaining, limits.ResetTime));
-			}
+			_throttler.SetRateLimit(limits);
+
+			NewEggLogger.LogTrace($"{info}, Total calls: {limits.Limit}, Remaining calls: {limits.Remaining}, Reset time: {limits.ResetTime}");
 		}
 
 		private NewEggRateLimit GetRateLimit(IHttpResponseMessage response)
 		{
 			var rateLimit = response.GetHeaderValue("X-RateLimit-Limit");
 			var rateRemaining = response.GetHeaderValue("X-RateLimit-Remaining");
-			var rateResetTime = response.GetHeaderValue("X-ratelimit-resettime");
+			var rateResetTime = response.GetHeaderValue("X-RateLimit-ResetTime");
 
 			if (!string.IsNullOrWhiteSpace(rateLimit)
 				&& !string.IsNullOrWhiteSpace(rateRemaining)
