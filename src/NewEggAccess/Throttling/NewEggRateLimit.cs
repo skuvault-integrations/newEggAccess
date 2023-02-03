@@ -31,7 +31,7 @@ namespace NewEggAccess.Throttling
 
 		private DateTime TryParseResetTime( string date )
 		{
-			var formats = new string[] { "d/M/yyyy h:mm:ss tt", "M/d/yyyy h:mm:ss tt" };
+			var formats = new [] { "M/d/yyyy h:mm:ss tt" };
 			DateTime.TryParseExact( date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime result );
 			return result;
 		}
