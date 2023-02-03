@@ -10,7 +10,7 @@ namespace NewEggAccess.Throttling
 		/// <summary>
 		///	API requests limits per defined time window
 		/// </summary>
-		private NewEggRateLimit RateLimit { get; set; }
+		public NewEggRateLimit RateLimit { get; set; }
 		
 		private readonly int _defaultQuotaRestoreTimeInSeconds;
 
@@ -36,11 +36,6 @@ namespace NewEggAccess.Throttling
 			_dateTimeProvider = dateTimeProvider;
 			_defaultQuotaRestoreTimeInSeconds = quotaRestoreTimeInSeconds;
 			RateLimit = new NewEggRateLimit(maxQuota, maxQuota, GetCurrentTimeInPst().AddSeconds(_defaultQuotaRestoreTimeInSeconds));
-		}
-		
-		public void SetRateLimit(NewEggRateLimit rateLimit)
-		{
-			RateLimit = rateLimit;
 		}
 		
 		public async Task< TResult > ExecuteAsync< TResult >( Func< Task< TResult > > funcToThrottle )
