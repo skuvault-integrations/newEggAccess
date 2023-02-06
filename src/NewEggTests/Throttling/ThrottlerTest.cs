@@ -41,7 +41,7 @@ namespace NewEggTests.Throttling
 		public async Task ExecuteAsync_NotWaits_WhenRemainingIsPositive()
 		{
 			// Arrange
-			_throttler.SetRateLimit(new NewEggRateLimit("10", "1", "12/20/2022 1:36:43 AM"));
+			_throttler.RateLimit = new NewEggRateLimit("10", "1", "12/20/2022 1:36:43 AM");
 			
 			// Act
 			await _throttler.ExecuteAsync(() => Task.FromResult(new object()));
@@ -62,7 +62,7 @@ namespace NewEggTests.Throttling
 			const int timeIntervalInSec = 30;
 			var currentTimeInPst = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(utcNow, "Pacific Standard Time");
 			var resetTime = currentTimeInPst.AddSeconds(timeIntervalInSec);
-			_throttler.SetRateLimit(new NewEggRateLimit("10", "0", resetTime.ToString("MM/dd/yyyy h:mm:ss tt")));
+			_throttler.RateLimit = new NewEggRateLimit("10", "0", resetTime.ToString("MM/dd/yyyy h:mm:ss tt"));
 			_dateTimeProviderMock.UtcNow().Returns(utcNow);
 
 			// Act

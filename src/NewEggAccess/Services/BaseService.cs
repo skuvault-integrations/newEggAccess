@@ -184,7 +184,7 @@ namespace NewEggAccess.Services
 
 			if (limits == null) return;
 
-			_throttler.SetRateLimit(limits);
+			_throttler.RateLimit = limits;
 
 			NewEggLogger.LogTrace($"{info}, Total calls: {limits.Limit}, Remaining calls: {limits.Remaining}, Reset time: {limits.ResetTime}");
 		}
