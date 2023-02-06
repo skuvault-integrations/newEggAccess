@@ -9,12 +9,12 @@
     <PackageLicenseUrl></PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/skuvault-integrations/newEggAccess</PackageProjectUrl>
     <RepositoryUrl>https://github.com/skuvault-integrations/newEggAccess</RepositoryUrl>
-    <Version>1.3.0.1</Version>
+    <Version>1.3.1.1</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.3.0.1</AssemblyVersion>
-    <FileVersion>1.3.0.1</FileVersion>
+    <AssemblyVersion>1.3.1.1</AssemblyVersion>
+    <FileVersion>1.3.1.1</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageVersion>1.3.0.1</PackageVersion>
+    <PackageVersion>1.3.1.1</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
