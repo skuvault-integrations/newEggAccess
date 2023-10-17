@@ -48,22 +48,34 @@ namespace NewEggAccess.Services.Regular
 			return null;
 		}
 
-		public async Task<BatchInventoryResponse> GetBatchInventoryAsync(List<string> skus, string warehouseLocationCode,
+		public async Task<List<ItemInventory>> GetBatchInventoryAsync(
+			List<string> skus,
+			string warehouseLocationCode,
 			Mark mark,
 			CancellationToken cancellationToken)
 		{
-			var request = new GetBatchInventoryRequest(
-				SellerPartNumberRequestType,
-				skus.ToArray(),
-				warehouseLocationCode);
-			var command = new GetBatchInventoryCommand(Config, Credentials, request.ToJson());
+			var itemsInventory = new List<ItemInventory>();
+			// we should split skus by 100 items:
+			// https://developer.newegg.com/newegg_marketplace_api/item_management/get-batch-inventory/
+			var skusByChunks = skus.SplitToChunks(100);
+			foreach (var skusInChunk in skusByChunks)
+			{
+				var request = new GetBatchInventoryRequest(
+					SellerPartNumberRequestType,
+					skus.ToArray(),
+					warehouseLocationCode);
+				var command = new GetBatchInventoryCommand(Config, Credentials, request.ToJson());
 
-			var response = await PostAsync(command, cancellationToken, mark, ignoreErrorHandler);
+				var response = await PostAsync(command, cancellationToken, mark, ignoreErrorHandler);
 
-			if (response.Error == null && response.Result != null)
-				return JsonConvert.DeserializeObject<BatchInventoryResponse>(response.Result);
+				if (response.Error == null && response.Result != null)
+				{
+					var batchInventoryResponse = JsonConvert.DeserializeObject<BatchInventoryResponse>(response.Result);
+					itemsInventory.AddRange(batchInventoryResponse.ResponseBody.ItemList);
+				}
+			}
 
-			return null;
+			return itemsInventory;
 		}
 
 		/// <summary>

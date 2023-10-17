@@ -57,7 +57,7 @@ namespace NewEggAccess.Services.Business
 			return null;
 		}
 
-		public Task<BatchInventoryResponse> GetBatchInventoryAsync(List<string> skus, string warehouseLocationCode, Mark mark, CancellationToken cancellationToken)
+		public Task<List<Models.Items.ItemInventory>> GetBatchInventoryAsync(List<string> skus, string warehouseLocationCode, Mark mark, CancellationToken cancellationToken)
 		{
 			throw new NotImplementedException();
 		}
