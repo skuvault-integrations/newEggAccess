@@ -126,5 +126,29 @@ namespace NewEggTests.Regular
 				CancellationToken.None);
 			});
 		}
+
+		[Test]
+		[Explicit]
+		public async Task GetBatchInventoryThatExists()
+		{
+			var response = await _itemsService.GetBatchInventoryAsync(new List<string> { TestSku1, TestSku2 },
+				WarehouseLocationCountryCode, Mark.CreateNew(),
+				CancellationToken.None);
+			response.ResponseBody.ItemList.Length.Should().Be(2);
+			response.ResponseBody.ItemList[0].SellerPartNumber.ToLower().Should().Be(TestSku1.ToLower());
+			response.ResponseBody.ItemList[1].SellerPartNumber.ToLower().Should().Be(TestSku2.ToLower());
+		}
+
+		// "PIXEL 4 VZW ORANGE 64GB (A)"
+		[Test]
+		[Explicit]
+		public async Task GetBatchInventoryThatDoesntExist()
+		{
+			var sku = Guid.NewGuid().ToString();
+			var sku2 = Guid.NewGuid().ToString();
+			var response = await this._itemsService.GetBatchInventoryAsync(new List<string> { sku, sku2 }, WarehouseLocationCountryCode, Mark.CreateNew(),
+				CancellationToken.None);
+			response.Should().BeNull();
+		}
 	}
 }

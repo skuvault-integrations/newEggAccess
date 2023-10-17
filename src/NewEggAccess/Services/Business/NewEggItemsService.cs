@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using NewEggAccess.Configuration;
 using NewEggAccess.Models;
 using NewEggAccess.Models.Commands.Business;
-using NewEggAccess.Models.Business.Items;
+using NewEggAccess.Models.Items;
 using NewEggAccess.Shared;
 using Newtonsoft.Json;
 using NewEggAccess.Models.Items.Business;
+using ItemInventory = NewEggAccess.Models.Business.Items.ItemInventory;
+using UpdateItemInventoryResponse = NewEggAccess.Models.Business.Items.UpdateItemInventoryResponse;
 
 namespace NewEggAccess.Services.Business
 {
@@ -53,6 +55,11 @@ namespace NewEggAccess.Services.Business
 			}
 
 			return null;
+		}
+
+		public Task<BatchInventoryResponse> GetBatchInventoryAsync(List<string> skus, string warehouseLocationCode, Mark mark, CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
 		}
 
 		/// <summary>

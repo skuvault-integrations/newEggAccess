@@ -48,6 +48,24 @@ namespace NewEggAccess.Services.Regular
 			return null;
 		}
 
+		public async Task<BatchInventoryResponse> GetBatchInventoryAsync(List<string> skus, string warehouseLocationCode,
+			Mark mark,
+			CancellationToken cancellationToken)
+		{
+			var request = new GetBatchInventoryRequest(
+				SellerPartNumberRequestType,
+				skus.ToArray(),
+				warehouseLocationCode);
+			var command = new GetBatchInventoryCommand(Config, Credentials, request.ToJson());
+
+			var response = await PostAsync(command, cancellationToken, mark, ignoreErrorHandler);
+
+			if (response.Error == null && response.Result != null)
+				return JsonConvert.DeserializeObject<BatchInventoryResponse>(response.Result);
+
+			return null;
+		}
+
 		/// <summary>
 		/// Update sku's quantity in specified warehouse location
 		/// </summary>
