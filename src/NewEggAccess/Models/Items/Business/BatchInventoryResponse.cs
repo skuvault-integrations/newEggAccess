@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace NewEggAccess.Models.Items
+namespace NewEggAccess.Models.Items.Business
 {
 	public class BatchInventoryResponse
 	{

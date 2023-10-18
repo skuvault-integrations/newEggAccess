@@ -139,7 +139,6 @@ namespace NewEggTests.Regular
 			response[1].SellerPartNumber.ToLower().Should().Be(TestSku2.ToLower());
 		}
 
-		// "PIXEL 4 VZW ORANGE 64GB (A)"
 		[Test]
 		[Explicit]
 		public async Task GetBatchInventoryThatDoesntExist()

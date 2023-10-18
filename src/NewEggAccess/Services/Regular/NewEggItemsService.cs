@@ -62,7 +62,7 @@ namespace NewEggAccess.Services.Regular
 			{
 				var request = new GetBatchInventoryRequest(
 					SellerPartNumberRequestType,
-					skus.ToArray(),
+					skusInChunk.ToArray(),
 					warehouseLocationCode);
 				var command = new GetBatchInventoryCommand(Config, Credentials, request.ToJson());
 
