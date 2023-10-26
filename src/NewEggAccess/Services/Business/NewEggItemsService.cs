@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using NewEggAccess.Configuration;
 using NewEggAccess.Models;
 using NewEggAccess.Models.Commands.Business;
-using NewEggAccess.Models.Business.Items;
 using NewEggAccess.Shared;
 using Newtonsoft.Json;
 using NewEggAccess.Models.Items.Business;
+using NewEggAccess.Services.Business.Converters;
+using BatchInventoryResponse = NewEggAccess.Models.Items.BatchInventoryResponse;
 
 namespace NewEggAccess.Services.Business
 {
@@ -49,10 +50,40 @@ namespace NewEggAccess.Services.Business
 
 			if (response.Error == null && response.Result != null)
 			{
-				return JsonConvert.DeserializeObject<Models.Items.ItemInventory>(response.Result, new NewEggGetItemInventoryResponseJsonConverter());
+				return JsonConvert.DeserializeObject<Models.Items.ItemInventory>(response.Result, new GetItemInventoryResponseJsonConverter());
 			}
 
 			return null;
+		}
+
+		public async Task<List<Models.Items.ItemInventory>> GetBatchInventoryAsync(List<string> skus, string warehouseLocationCode, Mark mark, CancellationToken cancellationToken)
+		{
+			var itemsInventory = new List<Models.Items.ItemInventory>();
+			// we should split skus by 100 items:
+			// https://developer.newegg.com/newegg_marketplace_api/item_management/get-batch-inventory/
+			var skusByChunks = skus.SplitToChunks(100);
+			foreach (var skusInChunk in skusByChunks)
+			{
+				var request = new GetBatchInventoryRequest(
+					SellerPartNumberRequestType,
+					skusInChunk.ToArray());
+				var command = new GetBatchInventoryCommand(Config, Credentials, request.ToJson());
+
+				bool IgnoreErrorHandler(HttpStatusCode status, ErrorResponse error) => 
+					error != null && error.Code == "CT026" && status == HttpStatusCode.BadRequest;
+
+				var response = await PostAsync(command, cancellationToken, mark, IgnoreErrorHandler);
+
+				if (response.Error == null && response.Result != null)
+				{
+					var batchInventoryResponse =
+						JsonConvert.DeserializeObject<BatchInventoryResponse>(response.Result,
+							new GetBatchInventoryResponseJsonConverter());
+					itemsInventory.AddRange(batchInventoryResponse.ResponseBody.ItemList);
+				}
+			}
+
+			return itemsInventory;
 		}
 
 		/// <summary>
@@ -78,7 +109,7 @@ namespace NewEggAccess.Services.Business
 			var response = await base.PutAsync(command, cancellationToken, mark, ignoreErrorHandler);
 			if (response.Error == null)
 			{
-				return JsonConvert.DeserializeObject<Models.Items.UpdateItemInventoryResponse>(response.Result, new NewEggGetUpdateInventoryResponseJsonConverter());
+				return JsonConvert.DeserializeObject<Models.Items.UpdateItemInventoryResponse>(response.Result, new GetUpdateInventoryResponseJsonConverter());
 			}
 
 			return null;
@@ -97,83 +128,6 @@ namespace NewEggAccess.Services.Business
 			{
 				await this.UpdateSkuQuantityAsync(skuQuantity.Key, string.Empty, skuQuantity.Value, mark, cancellationToken).ConfigureAwait(false);
 			}
-		}
-	}
-
-	internal class NewEggGetItemInventoryResponseJsonConverter : JsonConverter
-	{
-		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-		{
-			var source = serializer.Deserialize<ItemInventory>(reader);
-
-			return new Models.Items.ItemInventory
-			{
-				ItemNumber = source.ItemNumber,
-				SellerId = source.SellerId,
-				SellerPartNumber = source.SellerPartNumber,
-				InventoryAllocation = new Models.Items.ItemInventoryAllocation[]
-				{
-					new Models.Items.ItemInventoryAllocation
-					{
-						AvailableQuantity = source.AvailableQuantity,
-						FulFillmentOption = source.FulFillmentOption,
-						WarehouseLocationCode = "USA"
-					}
-				}
-			};
-		}
-
-		public override bool CanRead
-		{
-			get { return true; }
-		}
-
-		public override bool CanConvert(Type type)
-		{
-			return typeof(Models.Items.ItemInventory).IsAssignableFrom(type);
-		}
-	}
-
-	public class NewEggGetUpdateInventoryResponseJsonConverter : JsonConverter
-	{
-		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-		{
-			var source = serializer.Deserialize<UpdateItemInventoryResponse>(reader);
-
-			return new Models.Items.UpdateItemInventoryResponse
-			{
-				ItemNumber = source.ItemNumber,
-				SellerId = source.SellerId,
-				SellerPartNumber = source.SellerPartNumber,
-				InventoryList = new Models.Items.UpdateItemInventory[]
-				{
-					new Models.Items.UpdateItemInventory
-					{
-						WarehouseLocation = "USA",
-						AvailableQuantity = source.AvailableQuantity
-					}
-				}
-			};
-		}
-
-		public override bool CanRead
-		{
-			get { return true; }
-		}
-
-		public override bool CanConvert(Type type)
-		{
-			return typeof(Models.Items.UpdateItemInventoryResponse).IsAssignableFrom(type);
 		}
 	}
 }

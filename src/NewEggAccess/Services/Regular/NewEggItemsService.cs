@@ -48,6 +48,36 @@ namespace NewEggAccess.Services.Regular
 			return null;
 		}
 
+		public async Task<List<ItemInventory>> GetBatchInventoryAsync(
+			List<string> skus,
+			string warehouseLocationCode,
+			Mark mark,
+			CancellationToken cancellationToken)
+		{
+			var itemsInventory = new List<ItemInventory>();
+			// we should split skus by 100 items:
+			// https://developer.newegg.com/newegg_marketplace_api/item_management/get-batch-inventory/
+			var skusByChunks = skus.SplitToChunks(100);
+			foreach (var skusInChunk in skusByChunks)
+			{
+				var request = new GetBatchInventoryRequest(
+					SellerPartNumberRequestType,
+					skusInChunk.ToArray(),
+					warehouseLocationCode);
+				var command = new GetBatchInventoryCommand(Config, Credentials, request.ToJson());
+
+				var response = await PostAsync(command, cancellationToken, mark, ignoreErrorHandler);
+
+				if (response.Error == null && response.Result != null)
+				{
+					var batchInventoryResponse = JsonConvert.DeserializeObject<BatchInventoryResponse>(response.Result);
+					itemsInventory.AddRange(batchInventoryResponse.ResponseBody.ItemList);
+				}
+			}
+
+			return itemsInventory;
+		}
+
 		/// <summary>
 		/// Update sku's quantity in specified warehouse location
 		/// </summary>
